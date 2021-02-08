@@ -1,6 +1,5 @@
 import React from 'react';
 import './App.css';
-import {CodePipelineClient, } from '@aws-sdk/client-codepipeline'
 import AWS from 'aws-sdk';
 
 
@@ -24,12 +23,31 @@ let test =  codepipeline.listPipelines({}).promise().then(function(data) {
   return data
 }).catch(function(err) {
   return err
+}).then(async resp => {
+  console.log(resp)
 })
 
-test.then(function(res) {
-  console.log(res)
-})
 
+
+let trying = codepipeline.listPipelines({}).promise().then(function(data) {
+  let pipelines = data.pipelines
+  if (!pipelines) {
+    return null
+
+  }
+  let names = pipelines.map( (pipeline) => {
+    console.log(pipeline.name)
+    return pipeline.name
+  }
+  )
+
+  return names
+}
+).catch(err => {
+  console.log('err', err)
+}).then(res => {
+  console.log('finalres',res)
+})
 
 
   return (
