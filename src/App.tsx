@@ -1,24 +1,39 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
+import {CodePipelineClient, } from '@aws-sdk/client-codepipeline'
+import AWS from 'aws-sdk';
+
+
 
 function App() {
+
+
+const codepipeline = new AWS.CodePipeline({
+  region: 'eu-west-1',
+  credentials: {
+    accessKeyId: process.env.REACT_APP_ACCESS_KEY_ID!,
+    secretAccessKey: process.env.REACT_APP_SECRET_ACCESS_KEY!
+  }
+})
+
+console.log('secrets', process.env.REACT_APP_ACCESS_KEY_ID)
+console.log('secrets2', process.env.REACT_APP_SECRET_ACCESS_KEY)
+console.log(codepipeline)
+
+let test =  codepipeline.listPipelines({}).promise().then(function(data) {
+  return data
+}).catch(function(err) {
+  return err
+})
+
+test.then(function(res) {
+  console.log(res)
+})
+
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
     </div>
   );
 }
