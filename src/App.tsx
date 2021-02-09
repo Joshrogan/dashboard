@@ -1,30 +1,41 @@
-import React from 'react';
-import './App.css';
-import {CodePipelineClient, ListPipelinesCommand} from '@aws-sdk/client-codepipeline'
-import AWS from 'aws-sdk';
-
+import { useState, useEffect } from 'react';
+import {CONFIGURATION} from './config'
+import {PipelineSummary, CodePipelineClientConfig} from '@aws-sdk/client-codepipeline'
+import { CodePipelineService } from './pipeline/CodePipelineService'
 
 
 function App() {
 
-const codePipelineClient = new CodePipelineClient({
-    region: 'eu-west-1',
-    credentials: {
-       accessKeyId: process.env.REACT_APP_ACCESS_KEY_ID!,
-       secretAccessKey: process.env.REACT_APP_SECRET_ACCESS_KEY!
-}})
-
-let results = codePipelineClient.send(new ListPipelinesCommand({}))
-
-results.then(res => {
-  console.log(res)
-})
+  const [pipelines, setPipelines] = useState<PipelineSummary[] | undefined>([]);
+  const [config] = useState<CodePipelineClientConfig>(CONFIGURATION)
 
 
-  return (
-    <div className="App">
-    </div>
-  );
+
+
+useEffect(() => {
+
+  const fetchData = async(): Promise<void> => {
+    const codePipeline = new CodePipelineService(config)
+    const result = await codePipeline.listPipelines()
+    if (result !== undefined) {
+      setPipelines(result)
+    }      
+  }
+  fetchData();
+}, [config])
+
+
+
+
+
+return(
+  <div className="wrapper">
+   <h1>My Pipelines</h1>
+   <ul>
+     {pipelines?.map((pipeline,index) => <li key={index}>{pipeline.name}</li>)}
+   </ul>
+ </div>
+)
 }
 
 export default App;
