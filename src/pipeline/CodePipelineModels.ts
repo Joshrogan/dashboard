@@ -1,19 +1,18 @@
 export interface ActionModel {
-    name: string,
+    actionName: string,
     category: string,
     repo?: string,
     branch?: string,
 }
 
 export interface StageModel {
-    name: string,
+    stageName: string,
     actions: ActionModel[]
 }
 
 export interface PipelineModel {
-    name:  string,
-    updated:  Date,
-    created:  Date,
+    pipelineName:  string,
+
     stages: StageModel[]
 }
 

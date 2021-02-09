@@ -1,4 +1,4 @@
-import {CodePipelineClient, ListPipelinesCommand, ListPipelinesCommandOutput, CodePipelineClientConfig, GetPipelineCommand, GetPipelineOutput, GetPipelineCommandOutput} from '@aws-sdk/client-codepipeline'
+import {CodePipelineClient, ListPipelinesCommand, ListPipelinesCommandOutput, CodePipelineClientConfig, GetPipelineCommand, GetPipelineOutput, GetPipelineCommandOutput, PipelineDeclaration, StageDeclaration, ActionDeclaration} from '@aws-sdk/client-codepipeline'
 import {PipelineModel, ActionModel, StageModel} from './CodePipelineModels'
 export class CodePipelineService {
   private client: CodePipelineClient;
@@ -12,7 +12,7 @@ export class CodePipelineService {
       const results: ListPipelinesCommandOutput = await this.client.send(new ListPipelinesCommand({}))
       if (results.pipelines !== undefined) {
         const pipelineList: PipelineModel[] =  results.pipelines.map(pipeline  => ({
-          name: pipeline.name as string,
+          pipelineName: pipeline.name as string,
           updated: pipeline.updated as Date,
           created: pipeline.created as Date,
           stages: []
@@ -27,11 +27,36 @@ export class CodePipelineService {
     }
   } 
 
-  public async getPipeline(pipelineName: string | undefined): Promise<GetPipelineOutput | undefined> {
+  public async getPipeline(pipelineName: string): Promise<PipelineModel | undefined> {
     try {
         const results: GetPipelineCommandOutput = await this.client.send(new GetPipelineCommand({name: pipelineName}))
 
-        return results
+        const pipelineResult: PipelineDeclaration = results.pipeline as PipelineDeclaration
+        const stageResult: StageDeclaration[] = results.pipeline!.stages! as StageDeclaration[]
+
+
+        if (pipelineResult && stageResult) {
+
+  
+        const pipeline: PipelineModel = {
+          pipelineName: pipelineResult.name!,
+          stages: stageResult.map((stage) => {
+            return {
+            stageName: stage.name!,
+            actions: stage.actions!.map((action) => {
+              return {
+                actionName: action.name!,
+                category: action.actionTypeId?.category!,
+                repo: action.configuration?.RepositoryName,
+                branch: action.configuration?.BranchName
+              }
+            })
+            }
+          })
+        }
+
+        return pipeline
+      }
       
     }
    catch (error) {
