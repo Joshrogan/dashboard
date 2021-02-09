@@ -1,5 +1,5 @@
-import {CodePipelineClient, ListPipelinesCommand, ListPipelinesCommandOutput, PipelineSummary, CodePipelineClientConfig} from '@aws-sdk/client-codepipeline'
-
+import {CodePipelineClient, ListPipelinesCommand, ListPipelinesCommandOutput, PipelineSummary, CodePipelineClientConfig, GetPipelineCommand, GetPipelineOutput, GetPipelineCommandOutput} from '@aws-sdk/client-codepipeline'
+import {PipelineModel} from './CodePipelineModels'
 export class CodePipelineService {
   private client: CodePipelineClient;
 
@@ -23,8 +23,35 @@ export class CodePipelineService {
       const { requestId, cfId, extendedRequestId } = error.$metadata;
       console.error(error)
       console.log({ requestId, cfId, extendedRequestId });
+      return undefined
     }
   } 
+
+  public async getPipeline(pipelineName: string | undefined): Promise<GetPipelineOutput | undefined> {
+    try {
+        const results: GetPipelineCommandOutput = await this.client.send(new GetPipelineCommand({name: pipelineName}))
+
+        return results
+      
+    }
+   catch (error) {
+    console.log(error)
+  }
+}
 }
 
 
+
+/* 
+export interface GetPipelineOutput {
+    /**
+     * <p>Represents the structure of actions and stages to be performed in the pipeline.
+     *         </p>
+     */
+   // pipeline?: PipelineDeclaration;
+    /**
+     * <p>Represents the pipeline metadata information returned as part of the output of a
+     *                 <code>GetPipeline</code> action.</p>
+     */
+    //metadata?: PipelineMetadata;
+//}
