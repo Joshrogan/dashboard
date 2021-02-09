@@ -2,9 +2,10 @@ import { useState, useEffect } from 'react';
 import {CONFIGURATION} from './config'
 import {PipelineSummary, CodePipelineClientConfig, GetPipelineOutput} from '@aws-sdk/client-codepipeline'
 import { CodePipelineService } from './pipeline/CodePipelineService'
+import {PipelineModel} from './pipeline/CodePipelineModels'
 
 function App() {
-  const [pipelines, setPipelines] = useState<PipelineSummary[] | undefined>([]);
+  const [pipelines, setPipelines] = useState<PipelineModel[] | undefined>([]);
   const [pipelinesMetadata, setPipelinesMetadata] = useState<(GetPipelineOutput | undefined)[]>([])
   const [config] = useState<CodePipelineClientConfig>(CONFIGURATION)
 

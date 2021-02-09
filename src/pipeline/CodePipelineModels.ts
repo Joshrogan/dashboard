@@ -3,7 +3,6 @@ export interface ActionModel {
     category: string,
     repo?: string,
     branch?: string,
-    actionArn: string,
 }
 
 export interface StageModel {
@@ -15,7 +14,6 @@ export interface PipelineModel {
     name:  string,
     updated:  Date,
     created:  Date,
-    pipelineArn: string,
     stages: StageModel[]
 }
 

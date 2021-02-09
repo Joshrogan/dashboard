@@ -1,5 +1,5 @@
-import {CodePipelineClient, ListPipelinesCommand, ListPipelinesCommandOutput, PipelineSummary, CodePipelineClientConfig, GetPipelineCommand, GetPipelineOutput, GetPipelineCommandOutput} from '@aws-sdk/client-codepipeline'
-import {PipelineModel} from './CodePipelineModels'
+import {CodePipelineClient, ListPipelinesCommand, ListPipelinesCommandOutput, CodePipelineClientConfig, GetPipelineCommand, GetPipelineOutput, GetPipelineCommandOutput} from '@aws-sdk/client-codepipeline'
+import {PipelineModel, ActionModel, StageModel} from './CodePipelineModels'
 export class CodePipelineService {
   private client: CodePipelineClient;
 
@@ -7,17 +7,17 @@ export class CodePipelineService {
     this.client = new CodePipelineClient(configuration)
   }
 
-  public async listPipelines():  Promise<PipelineSummary[] | undefined> {
+  public async listPipelines():  Promise<PipelineModel[] | undefined> {
     try {
       const results: ListPipelinesCommandOutput = await this.client.send(new ListPipelinesCommand({}))
       if (results.pipelines !== undefined) {
-        let transformed =  results.pipelines.map(pipeline  => ({
+        const pipelineList: PipelineModel[] =  results.pipelines.map(pipeline  => ({
           name: pipeline.name as string,
-          version: pipeline.version as number,
           updated: pipeline.updated as Date,
           created: pipeline.created as Date,
-        } as PipelineSummary))
-        return transformed
+          stages: []
+        } ))
+        return pipelineList
       }
     } catch (error) {
       const { requestId, cfId, extendedRequestId } = error.$metadata;
