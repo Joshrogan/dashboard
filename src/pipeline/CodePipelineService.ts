@@ -27,7 +27,7 @@ export class CodePipelineService {
     }
   } 
 
-  public async getPipeline(pipelineName: string): Promise<PipelineModel | undefined> {
+  public async getPipelineInfo(pipelineName: string): Promise<PipelineModel | undefined> {
     try {
         const results: GetPipelineCommandOutput = await this.client.send(new GetPipelineCommand({name: pipelineName}))
 

@@ -15,7 +15,7 @@ useEffect(() => {
     const pipelineOverview = await codePipeline.listPipelines()
     if (pipelineOverview !== undefined) {
       setPipelines(pipelineOverview)
-      const pipelinesMetaCall = async() => { return Promise.all(pipelineOverview.map(pipeline => codePipeline.getPipeline(pipeline.pipelineName))) }
+      const pipelinesMetaCall = async() => { return Promise.all(pipelineOverview.map(pipeline => codePipeline.getPipelineInfo(pipeline.pipelineName))) }
       const pipelinesMeta = await pipelinesMetaCall()
       if (pipelinesMeta) {
         setPipelinesMetadata(pipelinesMeta)
@@ -31,18 +31,17 @@ useEffect(() => {
 return(
   <div className="wrapper">
    <h1>My Pipelines</h1>
-   <ul>
-     {pipelines?.map((pipeline,index) => 
-     <li key={index}>{(pipeline.pipelineName)}
-     <ul>
-
-       <li>{JSON.stringify((pipelinesMetadata[index]?.stages))}</li>
-       <li>{JSON.stringify((pipelinesMetadata[index]?.pipelineName))}</li>
-     </ul>
-     </li>)}
-     
-   </ul>
- </div>
+  <div>{pipelinesMetadata?.map((pipeline => {
+        return pipeline?.stages.map(stage => {
+      return stage?.actions.map(action => {
+        return `
+        ${pipeline.pipelineName}
+        ${stage.stageName}
+        ${action.category} 
+        `
+      })})}))}
+    </div>
+    </div>
 )
 }
 

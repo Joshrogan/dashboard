@@ -12,7 +12,6 @@ export interface StageModel {
 
 export interface PipelineModel {
     pipelineName:  string,
-
     stages: StageModel[]
 }
 
