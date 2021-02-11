@@ -20,10 +20,10 @@ useEffect(() => {
     
     if (currentPipelines !== undefined) {
       const getCurrentPipelinesInfo = async() => { return Promise.all(currentPipelines.map(pipeline => codePipelineClient.getPipelineInfo(pipeline.pipelineName))) }
-      const pipelineFullDetails = await getCurrentPipelinesInfo()
-      if (pipelineFullDetails) {
-        setPipelines(pipelineFullDetails)
-        console.log(pipelineFullDetails)
+      const pipelinesFullDetail = await getCurrentPipelinesInfo()
+      if (pipelinesFullDetail) {
+        setPipelines(pipelinesFullDetail)
+        console.log(pipelinesFullDetail)
       }
     }      
   }
