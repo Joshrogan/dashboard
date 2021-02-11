@@ -1,25 +1,24 @@
 import { useState, useEffect } from 'react';
 import {CONFIGURATION} from './config'
-import { CodePipelineClientConfig, GetPipelineOutput} from '@aws-sdk/client-codepipeline'
+import { CodePipelineClientConfig} from '@aws-sdk/client-codepipeline'
 import { CodePipelineService } from './pipeline/CodePipelineService'
 import {PipelineModel} from './pipeline/CodePipelineModels'
 
 function App() {
-  const [pipelines, setPipelines] = useState<PipelineModel[] | undefined>([]);
-  const [pipelinesMetadata, setPipelinesMetadata] = useState<(PipelineModel | undefined)[]>([])
+  const [pipelines, setPipelines] = useState<(PipelineModel | undefined)[]>([])
   const [config] = useState<CodePipelineClientConfig>(CONFIGURATION)
 
 useEffect(() => {
   const fetchData = async(): Promise<void> => {
-    const codePipeline = new CodePipelineService(config)
-    const pipelineOverview = await codePipeline.listPipelines()
-    if (pipelineOverview !== undefined) {
-      setPipelines(pipelineOverview)
-      const pipelinesMetaCall = async() => { return Promise.all(pipelineOverview.map(pipeline => codePipeline.getPipelineInfo(pipeline.pipelineName))) }
-      const pipelinesMeta = await pipelinesMetaCall()
-      if (pipelinesMeta) {
-        setPipelinesMetadata(pipelinesMeta)
-        console.log(pipelinesMeta)
+    const codePipelineClient = new CodePipelineService(config)
+    const currentPipelines = await codePipelineClient.listPipelines()
+    
+    if (currentPipelines !== undefined) {
+      const getCurrentPipelinesInfo = async() => { return Promise.all(currentPipelines.map(pipeline => codePipelineClient.getPipelineInfo(pipeline.pipelineName))) }
+      const pipelineFullDetails = await getCurrentPipelinesInfo()
+      if (pipelineFullDetails) {
+        setPipelines(pipelineFullDetails)
+        console.log(pipelineFullDetails)
       }
     }      
   }
@@ -27,11 +26,11 @@ useEffect(() => {
 }, [config])
 
 
-
+console.log(pipelines)
 return(
   <div className="wrapper">
    <h1>My Pipelines</h1>
-  <div>{pipelinesMetadata?.map((pipeline => {
+  {/* <div>{pipelinesMetadata?.map((pipeline => {
         return pipeline?.stages.map(stage => {
       return stage?.actions.map(action => {
         return `
@@ -40,7 +39,9 @@ return(
         ${action.category} 
         `
       })})}))}
-    </div>
+    </div> */}
+    {pipelines?.map((pipeline => { return JSON.stringify(pipeline)}))
+      }
     </div>
 )
 }
