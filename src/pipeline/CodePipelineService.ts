@@ -1,5 +1,5 @@
-import {CodePipelineClient, ListPipelinesCommand, ListPipelinesCommandOutput, CodePipelineClientConfig, GetPipelineCommand, GetPipelineOutput, GetPipelineCommandOutput, PipelineDeclaration, StageDeclaration, ActionDeclaration} from '@aws-sdk/client-codepipeline'
-import {PipelineModel, ActionModel, StageModel} from './CodePipelineModels'
+import {CodePipelineClient, ListPipelinesCommand, ListPipelinesCommandOutput, CodePipelineClientConfig, GetPipelineCommand, GetPipelineCommandOutput, PipelineDeclaration, StageDeclaration} from '@aws-sdk/client-codepipeline'
+import {PipelineModel} from './CodePipelineModels'
 
 
 export class CodePipelineService {
