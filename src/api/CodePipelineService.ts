@@ -1,5 +1,15 @@
-import {CodePipelineClient, ListPipelinesCommand, ListPipelinesCommandOutput, CodePipelineClientConfig, GetPipelineCommand, GetPipelineCommandOutput, PipelineDeclaration, StageDeclaration} from '@aws-sdk/client-codepipeline'
-import {PipelineModel} from './CodePipelineModels'
+import {CodePipelineClient,
+ListPipelinesCommand,
+ListPipelinesCommandOutput,
+CodePipelineClientConfig, 
+GetPipelineCommand,
+GetPipelineCommandOutput,
+PipelineDeclaration,
+StageDeclaration,
+ListPipelineExecutionsCommand,
+ListPipelineExecutionsOutput,
+PipelineExecutionSummary} from '@aws-sdk/client-codepipeline'
+import {PipelineModel, PipelineExecutionSummaryModel} from './CodePipelineModels'
 
 
 export class CodePipelineService {
@@ -37,11 +47,16 @@ export class CodePipelineService {
         const stageResult: StageDeclaration[] = results.pipeline!.stages! as StageDeclaration[]
 
 
+        const testExecution = await this.getPipelineExecutionInfo(pipelineName)
+
+        console.log('testExecution', testExecution)
+
         if (pipelineResult && stageResult) {
 
   
         const pipeline: PipelineModel = {
           pipelineName: pipelineResult.name!,
+          updated: results.metadata?.updated,
           stages: stageResult.map((stage) => {
             return {
             stageName: stage.name!,
@@ -64,6 +79,33 @@ export class CodePipelineService {
    catch (error) {
     console.log(error)
   }
+}
+
+
+//(PipelineModel | undefined)[]
+public async getPipelineExecutionInfo(pipelineName: string): Promise<(PipelineExecutionSummaryModel[] | undefined)> {
+  try {
+      const results: ListPipelineExecutionsOutput = await this.client.send(new ListPipelineExecutionsCommand({pipelineName}))
+
+      const pipelineExecutionSummaries = results.pipelineExecutionSummaries
+      if (pipelineExecutionSummaries !== undefined) {
+
+        const executionInfo: PipelineExecutionSummaryModel[]  = pipelineExecutionSummaries.map((info: PipelineExecutionSummary) => {
+          return {
+            lastUpdateTime: info.lastUpdateTime!,
+            startTime: info.startTime!,
+            status: info.status!
+          }
+        })
+        return executionInfo
+      }
+      // const pipelineResult: PipelineExecutionSummary = results as ListPipelineExecutionsOutput
+    
+    
+  }
+ catch (error) {
+  console.log(error)
+}
 }
 }
 
