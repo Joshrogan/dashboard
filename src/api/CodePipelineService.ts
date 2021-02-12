@@ -47,9 +47,7 @@ export class CodePipelineService {
         const stageResult: StageDeclaration[] = results.pipeline!.stages! as StageDeclaration[]
 
 
-        const testExecution = await this.getPipelineExecutionInfo(pipelineName)
-
-        console.log('testExecution', testExecution)
+        const pipelineExecution = await this.getPipelineExecutionInfo(pipelineName)
 
         if (pipelineResult && stageResult) {
 
@@ -57,6 +55,7 @@ export class CodePipelineService {
         const pipeline: PipelineModel = {
           pipelineName: pipelineResult.name!,
           updated: results.metadata?.updated,
+          pipelineExecutionSummary: pipelineExecution,
           stages: stageResult.map((stage) => {
             return {
             stageName: stage.name!,
@@ -82,8 +81,7 @@ export class CodePipelineService {
 }
 
 
-//(PipelineModel | undefined)[]
-public async getPipelineExecutionInfo(pipelineName: string): Promise<(PipelineExecutionSummaryModel[] | undefined)> {
+private async getPipelineExecutionInfo(pipelineName: string): Promise<(PipelineExecutionSummaryModel[] | undefined)> {
   try {
       const results: ListPipelineExecutionsOutput = await this.client.send(new ListPipelineExecutionsCommand({pipelineName}))
 
@@ -94,7 +92,14 @@ public async getPipelineExecutionInfo(pipelineName: string): Promise<(PipelineEx
           return {
             lastUpdateTime: info.lastUpdateTime!,
             startTime: info.startTime!,
-            status: info.status!
+            status: info.status!,
+            sourceRevisions: info.sourceRevisions?.map((revision) =>  {
+              return {
+                actionName: revision.actionName,
+                revisionSummary: revision.revisionSummary,
+                revisionUrl: revision.revisionUrl
+              }
+            })
           }
         })
         return executionInfo

@@ -2,7 +2,6 @@ import React from 'react'
 import {PipelineModel} from '../api/CodePipelineModels'
 import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
 import CardContent from '@material-ui/core/CardContent';
 
 

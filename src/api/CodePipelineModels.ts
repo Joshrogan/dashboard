@@ -10,19 +10,26 @@ export interface StageModel {
     actions: ActionModel[]
 }
 
+export interface SourceRevisionModel  {
+    actionName: string | undefined,
+    revisionSummary?: string,
+    revisionUrl?: string
+}
+
 export interface PipelineExecutionSummaryModel {
     lastUpdateTime: Date,
-    sourceRevisions?: string,
+    sourceRevisions?: SourceRevisionModel[],
     startTime: Date,
     status: string,
     stopTrigger?: string,
-     
+
 }
 
 export interface PipelineModel {
     pipelineName:  string,
     created?: Date,
     updated?: Date,
+    pipelineExecutionSummary?: PipelineExecutionSummaryModel[],
     stages: StageModel[]
 }
 

@@ -36,7 +36,7 @@ console.log(pipelines)
 return(
     <Container maxWidth="lg">
     <Typography variant="h2">{"My Pipelines"}</Typography>
-    {pipelines?.map((pipeline => <Pipeline pipeline={pipeline ?? null}/> ))}
+    {pipelines?.map((pipeline => <Pipeline key={pipeline?.pipelineName} pipeline={pipeline ?? null}/> ))}
     </Container> 
 )
 }
