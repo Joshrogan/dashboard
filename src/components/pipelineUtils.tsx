@@ -15,17 +15,10 @@ const getStatusColor = (pipeline: PipelineModel | null): string => {
         case PipelineExecutionStatus.InProgress: return 'blue';
         case PipelineExecutionStatus.Stopped: return 'orange';
         case PipelineExecutionStatus.Stopping: return 'orange';
-        case PipelineExecutionStatus.Succeeded: return 'green';
+        case PipelineExecutionStatus.Succeeded: return 'MediumSpringGreen ';
         case PipelineExecutionStatus.Superseded: return 'pink';
         default: return 'white'
     }
 }
-
-// Failed = "Failed",
-// InProgress = "InProgress",
-// Stopped = "Stopped",
-// Stopping = "Stopping",
-// Succeeded = "Succeeded",
-// Superseded = "Superseded"
 
 export {getStatusColor}

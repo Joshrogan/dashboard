@@ -97,7 +97,8 @@ private async getPipelineExecutionInfo(pipelineName: string): Promise<(PipelineE
               return {
                 actionName: revision.actionName,
                 revisionSummary: revision.revisionSummary,
-                revisionUrl: revision.revisionUrl
+                revisionUrl: revision.revisionUrl,
+                revisionId: revision.revisionId
               }
             })
           }

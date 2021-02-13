@@ -13,7 +13,8 @@ export interface StageModel {
 export interface SourceRevisionModel  {
     actionName: string | undefined,
     revisionSummary?: string,
-    revisionUrl?: string
+    revisionUrl?: string,
+    revisionId?: string
 }
 
 export interface PipelineExecutionSummaryModel {
