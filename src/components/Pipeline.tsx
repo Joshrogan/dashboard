@@ -8,6 +8,7 @@ import ReactTimeAgo from 'react-time-ago'
 import {getStatusColor} from './pipelineUtils'
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
+import LaunchIcon from '@material-ui/icons/Launch';
 
 
 
@@ -71,7 +72,7 @@ const Pipeline: React.FC<PipelineProps> = ({pipeline}: PipelineProps) => {
             {lastUpdateTime && <ReactTimeAgo date={lastUpdateTime}/>}
           </CardContent>
           <CardContent>{"Latest Commit: "}
-            {latestCommitSummary} {" "} {<Link href={latestCommitUrl}>{latestCommitId}</Link>}
+            {latestCommitSummary} {" "} {<Link href={latestCommitUrl}>{latestCommitId?.substring(0,9)} {<LaunchIcon fontSize={"inherit"} viewBox={"0 0 24 18"}/>}</Link>}
           </CardContent>
         </Card>
         </div>
