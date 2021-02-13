@@ -3,6 +3,7 @@ import {PipelineModel} from '../api/CodePipelineModels'
 import Card from '@material-ui/core/Card';
 import { makeStyles } from '@material-ui/core/styles';
 import CardContent from '@material-ui/core/CardContent';
+import ReactTimeAgo from 'react-time-ago'
 
 
 
@@ -34,12 +35,20 @@ const Pipeline: React.FC<PipelineProps> = ({pipeline}: PipelineProps) => {
         return null 
     }
 
+    let lastUpdateTime: any = null;
+    if (pipeline?.pipelineExecutionSummary !== undefined) {
+      lastUpdateTime = pipeline.pipelineExecutionSummary[0].lastUpdateTime ? pipeline.pipelineExecutionSummary[0].lastUpdateTime : null
+    }
+
     console.log('pipelines', pipeline)
 
     return (
         <div className={classes.root}>
         <Card className={classes.card}>
           <CardContent>{pipeline.pipelineName}</CardContent>
+          <CardContent>
+            <ReactTimeAgo date={lastUpdateTime}/>
+            </CardContent>
         </Card>
         </div>
     )
