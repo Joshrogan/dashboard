@@ -14,10 +14,11 @@ import LaunchIcon from '@material-ui/icons/Launch';
 
 
 type PipelineProps = {
-    pipeline: PipelineModel | null
+    pipeline: PipelineModel | null;
+    clickHandler: (e:  React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const useStyles = makeStyles<Theme, PipelineProps>(theme => 
+const useStyles = makeStyles<Theme,PipelineProps>(theme => 
   createStyles({
     root: {
       padding: '8px',
@@ -32,13 +33,16 @@ const useStyles = makeStyles<Theme, PipelineProps>(theme =>
   }));
   
 
-const Pipeline: React.FC<PipelineProps> = ({pipeline}: PipelineProps) => {
-    const classes = useStyles({pipeline});
+const Pipeline: React.FC<PipelineProps> = (Props: PipelineProps) => {
+  const classes = useStyles(Props);
+
+  let pipeline = Props.pipeline;
 
 
     if (pipeline === null) {
         return null 
     }
+
 
     if (pipeline?.pipelineExecutionSummary === undefined) {
       return null
@@ -65,13 +69,17 @@ const Pipeline: React.FC<PipelineProps> = ({pipeline}: PipelineProps) => {
     return (
         <div className={classes.root}>
         <Card className={classes.card} raised={true}>
-          <CardHeader className={classes.cardHeader} title={pipeline.pipelineName} subheader={"Status: " + pipelineStatus} action={              <Button size="small" color="primary" variant="contained">
-                More Info
-              </Button>} />
-          <CardContent>{"Last Updated: "}
+          <CardHeader 
+          className={classes.cardHeader} 
+          title={pipeline.pipelineName} 
+          subheader={"Status: " + pipelineStatus} 
+          action={<Button size="small" color="primary" variant="contained" onClick={Props.clickHandler}>More Info</Button>} />
+          <CardContent>
+            {"Last Updated: "}
             {lastUpdateTime && <ReactTimeAgo date={lastUpdateTime}/>}
           </CardContent>
-          <CardContent>{"Latest Commit: "}
+          <CardContent>
+            {"Latest Commit: "}
             {latestCommitSummary} {" "} {<Link href={latestCommitUrl}>{latestCommitId?.substring(0,9)} {<LaunchIcon fontSize={"inherit"} viewBox={"0 0 24 18"}/>}</Link>}
           </CardContent>
         </Card>
