@@ -1,20 +1,13 @@
-import React from 'react'
-import {StageModel} from '../api/CodePipelineModels'
-
-
-
+import React from 'react';
+import { PipelineModel } from '../api/CodePipelineModels';
 
 type StageProps = {
-    stage: string | undefined
-}
-
-
-  
-
-const Stage: React.FC<StageProps> = ({stage}: StageProps) => {
-    return (
-      <div>Hello World {stage}</div>
-    )
+  stage: PipelineModel | undefined;
 };
 
-export default Stage
+const Stage: React.FC<StageProps> = ({ stage }: StageProps) => {
+  console.log('stage', stage);
+  return <div>Hello World {stage?.pipelineName}</div>;
+};
+
+export default Stage;

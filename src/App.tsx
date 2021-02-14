@@ -15,7 +15,7 @@ interface IState {
 }
 
 function App() {
-  const [pipelines, setPipelines] = useState<(PipelineModel | undefined)[]>([]);
+  const [pipelines, setPipelines] = useState<PipelineModel[]>([]);
   // I'm using state for the config files for the opportunity in the future to support multiple regions/accounts.
   const [config] = useState<CodePipelineClientConfig>(CONFIGURATION);
   const [showChild, setShowChild] = useState<IState>({
@@ -35,9 +35,12 @@ function App() {
           );
         };
         const pipelinesFullDetail = await getCurrentPipelinesInfo();
-        if (pipelinesFullDetail) {
-          setPipelines(pipelinesFullDetail);
-          console.log(pipelinesFullDetail);
+        if (pipelinesFullDetail !== undefined) {
+          let notUndefined: PipelineModel[] = pipelinesFullDetail as PipelineModel[];
+          if (pipelinesFullDetail.every((pipeline) => pipeline !== undefined)) {
+            setPipelines(notUndefined);
+            console.log(pipelinesFullDetail);
+          }
         }
       }
     };
@@ -50,7 +53,7 @@ function App() {
       <Typography variant="h2">{'My Pipelines'}</Typography>
       {/* <Button onClick={() => setShowChild(true)} >{"Click me"}</Button> */}
       {showChild.show ? (
-        <Stage stage={showChild.iname} />
+        <Stage stage={pipelines.find((pipeline) => pipeline.pipelineName === showChild.iname)} />
       ) : (
         pipelines?.map((pipeline) => (
           <Pipeline
