@@ -7,7 +7,6 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Pipeline from './components/Pipeline';
 import Stage from './components/Stage';
-import Button from '@material-ui/core/Button';
 
 interface IState {
   iname: string | undefined;
@@ -51,7 +50,6 @@ function App() {
   return (
     <Container maxWidth="lg">
       <Typography variant="h2">{'My Pipelines'}</Typography>
-      {/* <Button onClick={() => setShowChild(true)} >{"Click me"}</Button> */}
       {showChild.show ? (
         <Stage stage={pipelines.find((pipeline) => pipeline.pipelineName === showChild.iname)} />
       ) : (
@@ -63,7 +61,6 @@ function App() {
           />
         ))
       )}
-      {/* {pipelines?.map((pipeline => <Pipeline key={pipeline?.pipelineName} pipeline={pipeline ?? null}/> ))} */}
     </Container>
   );
 }
