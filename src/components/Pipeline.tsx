@@ -55,8 +55,6 @@ const Pipeline: React.FC<PipelineProps> = (Props: PipelineProps) => {
 
   const latestCommitId = summary.sourceRevisions![0].revisionId;
 
-  console.log('pipelines', pipeline);
-
   return (
     <div className={classes.root}>
       <Card className={classes.card} raised={true}>

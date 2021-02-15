@@ -58,7 +58,6 @@ export class CodePipelineService {
             return {
               stageName: stage.name!,
               actions: stage.actions!.map((action) => {
-                console.log('action', action);
                 return {
                   actionName: action.name!,
                   category: action.actionTypeId?.category!,
