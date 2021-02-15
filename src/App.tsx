@@ -6,7 +6,7 @@ import { PipelineModel } from './api/CodePipelineModels';
 import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Pipeline from './components/Pipeline';
-import Stage from './components/Stage';
+import Stages from './components/Stages';
 
 interface IState {
   iname: string | undefined;
@@ -36,9 +36,8 @@ function App() {
         const pipelinesFullDetail = await getCurrentPipelinesInfo();
         if (pipelinesFullDetail !== undefined) {
           let notUndefined: PipelineModel[] = pipelinesFullDetail as PipelineModel[];
-          if (pipelinesFullDetail.every((pipeline) => pipeline !== undefined)) {
+          if (notUndefined.every((pipeline) => pipeline !== undefined)) {
             setPipelines(notUndefined);
-            console.log(pipelinesFullDetail);
           }
         }
       }
@@ -51,7 +50,7 @@ function App() {
     <Container maxWidth="lg">
       <Typography variant="h2">{'My Pipelines'}</Typography>
       {showChild.show ? (
-        <Stage stage={pipelines.find((pipeline) => pipeline.pipelineName === showChild.iname)} />
+        <Stages pipeline={pipelines.find((pipeline) => pipeline.pipelineName === showChild.iname)} />
       ) : (
         pipelines?.map((pipeline) => (
           <Pipeline

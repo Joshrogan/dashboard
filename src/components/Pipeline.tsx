@@ -1,90 +1,91 @@
-import React from 'react'
-import {PipelineModel} from '../api/CodePipelineModels'
+import React from 'react';
+import { PipelineModel } from '../api/CodePipelineModels';
 import Card from '@material-ui/core/Card';
-import { makeStyles, createStyles, Theme } from "@material-ui/core/styles";
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
-import ReactTimeAgo from 'react-time-ago'
-import {getStatusColor} from './pipelineUtils'
+import ReactTimeAgo from 'react-time-ago';
+import { getStatusColor } from './pipelineUtils';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import LaunchIcon from '@material-ui/icons/Launch';
 
-
-
-
 type PipelineProps = {
-    pipeline: PipelineModel | null;
-    clickHandler: (e:  React.MouseEvent<HTMLButtonElement>) => void;
-}
+  pipeline: PipelineModel | null;
+  clickHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
+};
 
-const useStyles = makeStyles<Theme,PipelineProps>(theme => 
+const useStyles = makeStyles<Theme, PipelineProps>((theme) =>
   createStyles({
     root: {
       padding: '8px',
     },
     cardHeader: {
-      backgroundColor: ({pipeline}) => getStatusColor(pipeline),
-      borderBottom: '1px solid black'
+      backgroundColor: ({ pipeline }) => getStatusColor(pipeline),
+      borderBottom: '1px solid black',
     },
     card: {
-      backgroundColor: 'FloralWhite'
-    }
-  }));
-  
+      backgroundColor: 'FloralWhite',
+    },
+  })
+);
 
 const Pipeline: React.FC<PipelineProps> = (Props: PipelineProps) => {
   const classes = useStyles(Props);
 
   let pipeline = Props.pipeline;
 
+  if (pipeline === null) {
+    return null;
+  }
 
-    if (pipeline === null) {
-        return null 
-    }
+  if (pipeline?.pipelineExecutionSummary === undefined) {
+    return null;
+  }
 
+  const summary = pipeline.pipelineExecutionSummary[0];
 
-    if (pipeline?.pipelineExecutionSummary === undefined) {
-      return null
-    }
+  const lastUpdateTime = summary.lastUpdateTime ? pipeline.pipelineExecutionSummary[0].lastUpdateTime : null;
 
-    const summary = pipeline.pipelineExecutionSummary[0]
+  const pipelineStatus = summary.status ? pipeline.pipelineExecutionSummary[0].status : null;
 
-    const lastUpdateTime = summary.lastUpdateTime ? pipeline.pipelineExecutionSummary[0].lastUpdateTime : null
-    
+  const latestCommitUrl = summary.sourceRevisions![0].revisionUrl;
 
-    const pipelineStatus = summary.status ? pipeline.pipelineExecutionSummary[0].status : null
-    
-    const latestCommitUrl = summary.sourceRevisions![0].revisionUrl
+  const latestCommitSummary = summary.sourceRevisions![0].revisionSummary;
 
-    const latestCommitSummary = summary.sourceRevisions![0].revisionSummary
+  const latestCommitId = summary.sourceRevisions![0].revisionId;
 
-    const latestCommitId = summary.sourceRevisions![0].revisionId
+  console.log('pipelines', pipeline);
 
-
-
-    console.log('pipelines', pipeline)
-
-    console.log(latestCommitSummary)
-    return (
-        <div className={classes.root}>
-        <Card className={classes.card} raised={true}>
-          <CardHeader 
-          className={classes.cardHeader} 
-          title={pipeline.pipelineName} 
-          subheader={"Status: " + pipelineStatus} 
-          action={<Button size="small" color="primary" variant="contained" onClick={Props.clickHandler}>More Info</Button>} />
-          <CardContent>
-            {"Last Updated: "}
-            {lastUpdateTime && <ReactTimeAgo date={lastUpdateTime}/>}
-          </CardContent>
-          <CardContent>
-            {"Latest Commit: "}
-            {latestCommitSummary} {" "} {<Link href={latestCommitUrl}>{latestCommitId?.substring(0,9)} {<LaunchIcon fontSize={"inherit"} viewBox={"0 0 24 18"}/>}</Link>}
-          </CardContent>
-        </Card>
-        </div>
-    )
+  return (
+    <div className={classes.root}>
+      <Card className={classes.card} raised={true}>
+        <CardHeader
+          className={classes.cardHeader}
+          title={pipeline.pipelineName}
+          subheader={'Status: ' + pipelineStatus}
+          action={
+            <Button size="small" color="primary" variant="contained" onClick={Props.clickHandler}>
+              More Info
+            </Button>
+          }
+        />
+        <CardContent>
+          {'Last Updated: '}
+          {lastUpdateTime && <ReactTimeAgo date={lastUpdateTime} />}
+        </CardContent>
+        <CardContent>
+          {'Latest Commit: '}
+          {latestCommitSummary}{' '}
+          {
+            <Link href={latestCommitUrl}>
+              {latestCommitId?.substring(0, 9)} {<LaunchIcon fontSize={'inherit'} viewBox={'0 0 24 18'} />}
+            </Link>
+          }
+        </CardContent>
+      </Card>
+    </div>
+  );
 };
 
-export default Pipeline
+export default Pipeline;
