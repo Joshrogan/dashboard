@@ -16,7 +16,7 @@ const Stages: React.FC<StagesProps> = ({ pipeline }: StagesProps) => {
   return (
     <div>
       {stages.map((stage) => (
-        <Stage stage={stage} pipeline={pipeline} />
+        <Stage key={stage.stageName} stage={stage} pipeline={pipeline} />
       ))}
     </div>
   );
