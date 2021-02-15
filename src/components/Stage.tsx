@@ -5,6 +5,7 @@ import Typography from '@material-ui/core/Typography';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import ListSubheader from '@material-ui/core/ListSubheader';
+import Action from './Actions/Action';
 
 type StageProps = {
   stage: StageModel;
@@ -29,7 +30,7 @@ const Stage: React.FC<StageProps> = ({ stage }: StageProps) => {
       </Typography>
       <List>
         {actions.map((action) => (
-          <ListItem>{action.category}</ListItem>
+          <Action action={action} />
         ))}
       </List>
     </div>
