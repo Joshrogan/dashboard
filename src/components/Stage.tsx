@@ -13,7 +13,7 @@ type StageProps = {
 };
 
 const Stage: React.FC<StageProps> = ({ stage, pipeline }: StageProps) => {
-  if (stage === undefined || pipeline === undefined) {
+  if (stage === undefined || pipeline === undefined || stage.actions === undefined) {
     return null;
   }
 
@@ -21,6 +21,7 @@ const Stage: React.FC<StageProps> = ({ stage, pipeline }: StageProps) => {
 
   const actions = stage.actions;
 
+  console.log('stage', stage);
   // console.log('pipeline - stage', pipeline);
   // console.log('stage - stage', stage);
   let stageName = `Stage: ${stage.stageName}`;
@@ -31,7 +32,7 @@ const Stage: React.FC<StageProps> = ({ stage, pipeline }: StageProps) => {
         <TreeItem nodeId={stage.stageName} label={stageName}>
           <List key={stage.stageName}>
             {actions.map((action) => (
-              <Action action={action} pipeline={pipeline} key={action.actionName} />
+              <Action action={action} pipeline={pipeline} key={action.actionName} stage={stage} />
             ))}
           </List>
         </TreeItem>

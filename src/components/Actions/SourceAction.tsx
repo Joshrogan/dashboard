@@ -4,24 +4,25 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import ReactTimeAgo from 'react-time-ago';
-import { getStatusColor } from '../pipelineUtils';
+import { getActionStatusColor } from '../pipelineUtils';
 import Link from '@material-ui/core/Link';
 import LaunchIcon from '@material-ui/icons/Launch';
 
-import { ActionModel, PipelineModel } from '../../api/CodePipelineModels';
+import { ActionModel, PipelineModel, StageModel } from '../../api/CodePipelineModels';
 
 type SourceActionProps = {
-  action: ActionModel | undefined;
+  action: ActionModel;
   pipeline: PipelineModel;
+  stage: StageModel;
 };
 
-const useStyles = makeStyles<Theme, PipelineModel>((theme) =>
+const useStyles = makeStyles<Theme, StageModel>((theme) =>
   createStyles({
     root: {
       padding: '8px',
     },
     cardHeader: {
-      backgroundColor: (pipeline) => getStatusColor(pipeline),
+      backgroundColor: (stage) => getActionStatusColor(stage),
       borderBottom: '1px solid black',
     },
     card: {
@@ -30,9 +31,10 @@ const useStyles = makeStyles<Theme, PipelineModel>((theme) =>
   })
 );
 
-const SourceAction: React.FC<SourceActionProps> = ({ action, pipeline }: SourceActionProps) => {
-  const classes = useStyles(pipeline);
+const SourceAction: React.FC<SourceActionProps> = ({ action, pipeline, stage }: SourceActionProps) => {
+  const classes = useStyles(stage);
 
+  console.log('sourceAction action', pipeline);
   if (pipeline === null) {
     return null;
   }
@@ -59,7 +61,7 @@ const SourceAction: React.FC<SourceActionProps> = ({ action, pipeline }: SourceA
         <CardHeader
           className={classes.cardHeader}
           title={pipeline.pipelineName}
-          subheader={'Status: ' + pipelineStatus}
+          subheader={'Status: ' + stage.status}
         />
         <CardContent>
           {'Last Updated: '}
