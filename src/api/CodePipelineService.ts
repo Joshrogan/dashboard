@@ -5,12 +5,17 @@ import {
   CodePipelineClientConfig,
   GetPipelineCommand,
   GetPipelineCommandOutput,
+  GetPipelineStateCommand,
+  GetPipelineStateOutput,
+  GetPipelineExecutionCommand,
+  GetPipelineExecutionCommandOutput,
   PipelineDeclaration,
   StageDeclaration,
   ListPipelineExecutionsCommand,
   ListPipelineExecutionsOutput,
   PipelineExecutionSummary,
 } from '@aws-sdk/client-codepipeline';
+import { pipeline } from 'node:stream';
 import { PipelineModel, PipelineExecutionSummaryModel } from './CodePipelineModels';
 
 export class CodePipelineService {
@@ -47,13 +52,34 @@ export class CodePipelineService {
       const pipelineResult: PipelineDeclaration = results.pipeline as PipelineDeclaration;
       const stageResult: StageDeclaration[] = results.pipeline!.stages! as StageDeclaration[];
 
-      const pipelineExecution = await this.getPipelineExecutionInfo(pipelineName);
+      const pipelineExecutionInfo = await this.getPipelineExecutionInfo(pipelineName);
+
+      const pipelineStagesState = await this.getPipelineState(pipelineName);
+
+      if (pipelineStagesState !== undefined) {
+        let executionId = pipelineStagesState.stageStates[0].latestExecution.pipelineExecutionId;
+        console.log('EXEC', executionId);
+      }
+
+      // pipelineStagesState.then((data: GetPipelineStateOutput) => {
+      //   if (data !== undefined && data.stageStates !== undefined) {
+      //     let executionId = data.stageStates[0].latestExecution?.pipelineExecutionId;
+      //     console.log('###', executionId);
+      //   }
+      // });
+      // const pipelineExecution = await this.getPipelineExecutio(pipelineName);
+
+      console.log('pipelineStagesState', pipelineStagesState);
+      console.log('pipelineExecutionInfo', pipelineExecutionInfo);
+      console.log('pipelineResult', pipelineResult);
+
+      // console.log('pipelineExecution', pipelineExecution);
 
       if (pipelineResult && stageResult) {
         const pipeline: PipelineModel = {
           pipelineName: pipelineResult.name!,
           updated: results.metadata?.updated,
-          pipelineExecutionSummary: pipelineExecution,
+          pipelineExecutionSummary: pipelineExecutionInfo,
           stages: stageResult.map((stage) => {
             return {
               stageName: stage.name!,
@@ -108,18 +134,31 @@ export class CodePipelineService {
       console.log(error);
     }
   }
-}
 
-/* 
-export interface GetPipelineOutput {
-    /**
-     * <p>Represents the structure of actions and stages to be performed in the pipeline.
-     *         </p>
-     */
-// pipeline?: PipelineDeclaration;
-/**
- * <p>Represents the pipeline metadata information returned as part of the output of a
- *                 <code>GetPipeline</code> action.</p>
- */
-//metadata?: PipelineMetadata;
-//}
+  private async getPipelineExecution(
+    pipelineName: string,
+    pipelineExecutionId: string
+  ): Promise<GetPipelineExecutionCommandOutput | undefined> {
+    try {
+      const results: GetPipelineExecutionCommandOutput = await this.client.send(
+        new GetPipelineExecutionCommand({ pipelineName, pipelineExecutionId })
+      );
+
+      return results;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  private async getPipelineState(pipelineName: string): Promise<any> {
+    try {
+      const results: GetPipelineStateOutput = await this.client.send(
+        new GetPipelineStateCommand({ name: pipelineName })
+      );
+
+      return results;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+}

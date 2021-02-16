@@ -17,10 +17,12 @@ const Stage: React.FC<StageProps> = ({ stage, pipeline }: StageProps) => {
     return null;
   }
 
-  console.log('stage - pipeline', pipeline);
+  // console.log('stage - pipeline', pipeline);
 
   const actions = stage.actions;
 
+  // console.log('pipeline - stage', pipeline);
+  // console.log('stage - stage', stage);
   let stageName = `Stage: ${stage.stageName}`;
 
   return (

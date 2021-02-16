@@ -45,6 +45,7 @@ function App() {
     fetchData();
   }, [config]);
 
+  console.log('pipelines app level', pipelines);
   return (
     <Container maxWidth="lg">
       <Typography variant="h2">{'My Pipelines'}</Typography>
