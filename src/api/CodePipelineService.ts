@@ -14,9 +14,9 @@ import {
   ListPipelineExecutionsCommand,
   ListPipelineExecutionsOutput,
   PipelineExecutionSummary,
+  StageState,
 } from '@aws-sdk/client-codepipeline';
-import { pipeline } from 'node:stream';
-import { PipelineModel, PipelineExecutionSummaryModel } from './CodePipelineModels';
+import { PipelineModel, PipelineExecutionSummaryModel, StageModel } from './CodePipelineModels';
 
 export class CodePipelineService {
   private client: CodePipelineClient;
@@ -54,31 +54,20 @@ export class CodePipelineService {
 
       const pipelineExecutionInfo = await this.getPipelineExecutionInfo(pipelineName);
 
-      const pipelineStagesState = await this.getPipelineState(pipelineName);
+      const pipelineState = await this.getPipelineState(pipelineName);
+      let pipelineExecutionId = pipelineState.stageStates[0].latestExecution.pipelineExecutionId;
 
-      if (pipelineStagesState !== undefined) {
-        let executionId = pipelineStagesState.stageStates[0].latestExecution.pipelineExecutionId;
-        console.log('EXEC', executionId);
-      }
+      const pipelineExecution = await this.getPipelineExecution(pipelineName, pipelineExecutionId);
+      let pipelineStatus = pipelineExecution?.pipelineExecution?.status;
 
-      // pipelineStagesState.then((data: GetPipelineStateOutput) => {
-      //   if (data !== undefined && data.stageStates !== undefined) {
-      //     let executionId = data.stageStates[0].latestExecution?.pipelineExecutionId;
-      //     console.log('###', executionId);
-      //   }
-      // });
-      // const pipelineExecution = await this.getPipelineExecutio(pipelineName);
-
-      console.log('pipelineStagesState', pipelineStagesState);
-      console.log('pipelineExecutionInfo', pipelineExecutionInfo);
-      console.log('pipelineResult', pipelineResult);
-
-      // console.log('pipelineExecution', pipelineExecution);
+      console.log('pipelineState', pipelineState);
 
       if (pipelineResult && stageResult) {
         const pipeline: PipelineModel = {
           pipelineName: pipelineResult.name!,
           updated: results.metadata?.updated,
+          pipelineExecutionId: pipelineExecutionId,
+          status: pipelineStatus,
           pipelineExecutionSummary: pipelineExecutionInfo,
           stages: stageResult.map((stage) => {
             return {
@@ -95,7 +84,29 @@ export class CodePipelineService {
           }),
         };
 
-        return pipeline;
+        let pipelineStageStates: GetPipelineStateOutput = await this.getPipelineState(pipeline.pipelineName);
+        if (pipelineStageStates.stageStates !== undefined) {
+          let stageStates: StageState[] = pipelineStageStates.stageStates;
+          let stages: StageModel[] = pipeline.stages.map((stage) => {
+            let findStage = stageStates.find((tempStage) => {
+              return tempStage.stageName === stage.stageName;
+            });
+            let newStage: StageModel = {
+              ...stage,
+              status: findStage?.latestExecution?.status,
+            };
+            return newStage;
+          });
+
+          let newPipeline: PipelineModel = {
+            ...pipeline,
+            stages: {
+              ...stages,
+            },
+          };
+
+          return newPipeline;
+        }
       }
     } catch (error) {
       console.log(error);
@@ -162,3 +173,10 @@ export class CodePipelineService {
     }
   }
 }
+
+// status: pipelineStageStates.stageStates.forEach((state) => {
+//   if (pipeline.stages.stageName === state.stageName) {
+//     return state.latestExecution.status;
+//   }
+// }),
+// },
