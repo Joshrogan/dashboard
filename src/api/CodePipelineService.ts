@@ -100,9 +100,7 @@ export class CodePipelineService {
 
           let newPipeline: PipelineModel = {
             ...pipeline,
-            stages: {
-              ...stages,
-            },
+            stages: stages,
           };
 
           return newPipeline;
