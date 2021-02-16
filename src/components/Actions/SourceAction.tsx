@@ -55,11 +55,7 @@ const SourceAction: React.FC<SourceActionProps> = ({ action, pipeline, stage }: 
   return (
     <div className={classes.root}>
       <Card className={classes.card} raised={true}>
-        <CardHeader
-          className={classes.cardHeader}
-          title={pipeline.pipelineName}
-          subheader={'Status: ' + stage.status}
-        />
+        <CardHeader className={classes.cardHeader} title={action.actionName} subheader={'Status: ' + stage.status} />
         <CardContent>
           {'Last Updated: '}
           {lastUpdateTime && <ReactTimeAgo date={lastUpdateTime} />}

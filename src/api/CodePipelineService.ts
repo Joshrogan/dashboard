@@ -16,7 +16,7 @@ import {
   PipelineExecutionSummary,
   StageState,
 } from '@aws-sdk/client-codepipeline';
-import { PipelineModel, PipelineExecutionSummaryModel, StageModel } from './CodePipelineModels';
+import { PipelineModel, PipelineExecutionSummaryModel, StageModel, ActionModel } from './CodePipelineModels';
 
 export class CodePipelineService {
   private client: CodePipelineClient;
@@ -60,8 +60,6 @@ export class CodePipelineService {
       const pipelineExecution = await this.getPipelineExecution(pipelineName, pipelineExecutionId);
       let pipelineStatus = pipelineExecution?.pipelineExecution?.status;
 
-      console.log('pipelineState', pipelineState);
-
       if (pipelineResult && stageResult) {
         const pipeline: PipelineModel = {
           pipelineName: pipelineResult.name!,
@@ -84,16 +82,25 @@ export class CodePipelineService {
           }),
         };
 
+        // code below is to get the status of each stage & status of each action and store them in model too
         let pipelineStageStates: GetPipelineStateOutput = await this.getPipelineState(pipeline.pipelineName);
         if (pipelineStageStates.stageStates !== undefined) {
           let stageStates: StageState[] = pipelineStageStates.stageStates;
+          console.log('stageStates', stageStates);
           let stages: StageModel[] = pipeline.stages.map((stage) => {
             let findStage = stageStates.find((tempStage) => {
               return tempStage.stageName === stage.stageName;
             });
+            let newActions: ActionModel[] = stage.actions.map((action) => {
+              return {
+                ...action,
+                status: findStage?.actionStates![0].latestExecution?.status,
+              };
+            });
             let newStage: StageModel = {
               ...stage,
               status: findStage?.latestExecution?.status,
+              actions: newActions,
             };
             return newStage;
           });
