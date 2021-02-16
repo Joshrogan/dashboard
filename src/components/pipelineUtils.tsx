@@ -1,9 +1,8 @@
 import { PipelineExecutionStatus } from '@aws-sdk/client-codepipeline';
-import { ActionModel, PipelineModel, StageModel } from '../api/CodePipelineModels';
+import { PipelineModel, StageModel } from '../api/CodePipelineModels';
 
 const getActionStatusColor = (stage: StageModel): string => {
   let status = stage.status;
-  console.log('actionSTATUS', status);
 
   switch (status) {
     case PipelineExecutionStatus.Failed:

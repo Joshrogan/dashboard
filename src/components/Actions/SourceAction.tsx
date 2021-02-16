@@ -34,7 +34,6 @@ const useStyles = makeStyles<Theme, StageModel>((theme) =>
 const SourceAction: React.FC<SourceActionProps> = ({ action, pipeline, stage }: SourceActionProps) => {
   const classes = useStyles(stage);
 
-  console.log('sourceAction action', pipeline);
   if (pipeline === null) {
     return null;
   }
@@ -46,8 +45,6 @@ const SourceAction: React.FC<SourceActionProps> = ({ action, pipeline, stage }: 
   const summary = pipeline.pipelineExecutionSummary[0];
 
   const lastUpdateTime = summary.lastUpdateTime ? pipeline.pipelineExecutionSummary[0].lastUpdateTime : null;
-
-  const pipelineStatus = summary.status ? pipeline.pipelineExecutionSummary[0].status : null;
 
   const latestCommitUrl = summary.sourceRevisions![0].revisionUrl;
 
