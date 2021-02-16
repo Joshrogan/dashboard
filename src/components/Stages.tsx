@@ -13,13 +13,12 @@ const Stages: React.FC<StagesProps> = ({ pipeline }: StagesProps) => {
 
   const stages = pipeline.stages;
 
-  let stagesTemp = stages[0].stageName;
-
-  console.log(typeof stages);
+  let header = pipeline.pipelineName + ' Status: ' + pipeline.status;
 
   return (
     <div>
-      {stagesTemp}
+      {header}
+
       {stages.map((stage) => (
         <Stage key={stage.stageName} stage={stage} pipeline={pipeline} />
       ))}
