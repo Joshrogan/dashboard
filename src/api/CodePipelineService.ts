@@ -94,6 +94,7 @@ export class CodePipelineService {
               return {
                 ...action,
                 status: findStage?.actionStates![0].latestExecution?.status,
+                actionId: findStage?.actionStates![0].latestExecution?.externalExecutionId,
               };
             });
             let newStage: StageModel = {

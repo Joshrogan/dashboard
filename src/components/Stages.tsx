@@ -1,6 +1,9 @@
 import React from 'react';
 import { PipelineModel } from '../api/CodePipelineModels';
 import Stage from './Stage';
+import CheckIcon from '@material-ui/icons/Check';
+import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
+import { green, red } from '@material-ui/core/colors';
 
 type StagesProps = {
   pipeline: PipelineModel | undefined;
@@ -13,7 +16,27 @@ const Stages: React.FC<StagesProps> = ({ pipeline }: StagesProps) => {
 
   const stages = pipeline.stages;
 
-  let header = pipeline.pipelineName + ' Status: ' + pipeline.status;
+  let icon =
+    pipeline.status === 'Succeeded' ? (
+      <CheckIcon style={{ color: green[500] }} />
+    ) : (
+      <ErrorOutlineIcon style={{ color: red[500] }} />
+    );
+
+  let header = (
+    <div
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+      }}
+    >
+      <span>
+        {pipeline.pipelineName}&nbsp;{'Overall Status: '}
+      </span>{' '}
+      {icon}
+    </div>
+  );
 
   return (
     <div>

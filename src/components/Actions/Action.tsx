@@ -16,7 +16,7 @@ const Action: Function = (Props: ActionProps) => {
   let pipeline = Props.pipeline;
   switch (category) {
     case 'Build':
-      return <BuildAction action={action} />;
+      return <BuildAction action={action} pipeline={pipeline} stage={stage} />;
     case 'Deploy':
       return <DeployAction action={action} />;
     case 'Source':

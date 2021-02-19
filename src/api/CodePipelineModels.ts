@@ -1,6 +1,7 @@
 export interface ActionModel {
   actionName: string;
   category: string;
+  actionId?: string;
   repo?: string;
   branch?: string;
   status?: string;
