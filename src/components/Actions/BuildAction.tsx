@@ -14,17 +14,13 @@ type BuildActionProps = {
 const BuildAction: React.FC<BuildActionProps> = ({ action, pipeline, stage }: BuildActionProps) => {
   const [config] = useState<CodeBuildClientConfig>(CONFIGURATION);
 
-  let builds = action.actionId !== undefined ? [action.actionId] : [];
-
-  console.log('buildaction', action);
-  console.log('buildstage', stage);
-  console.log('buildpipe', pipeline);
+  let buildProjectId = action.buildProject!;
 
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
       const codeBuildClient = new CodeBuildService(config);
-      const currentBuilds = await codeBuildClient.batchGetBuilds(builds);
-      console.log('currentBuilds', currentBuilds);
+      const buildIds = await codeBuildClient.listBuildsForProject(buildProjectId);
+      console.log('buildIds', buildIds);
     };
     fetchData();
   }, [config]);

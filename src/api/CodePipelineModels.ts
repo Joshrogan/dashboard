@@ -5,6 +5,7 @@ export interface ActionModel {
   repo?: string;
   branch?: string;
   status?: string;
+  buildProject?: string;
 }
 
 export interface StageModel {

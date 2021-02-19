@@ -3,7 +3,10 @@ import {
   CodeBuildClient,
   CodeBuildClientConfig,
   BatchGetBuildsCommandOutput,
-  BatchGetBuildsInput,
+  ListBuildsForProjectCommand,
+  ListBuildsForProjectCommandOutput,
+  ListProjectsCommand,
+  ListProjectsCommandOutput,
 } from '@aws-sdk/client-codebuild';
 import { BuildModel } from './CodeBuildModels';
 
@@ -37,4 +40,22 @@ export class CodeBuildService {
       console.error(error);
     }
   }
+
+  public async listBuildsForProject(projectName: string): Promise<any> {
+    console.log('proj name', projectName);
+    try {
+      console.log('proj name inside try', projectName);
+      const results: ListBuildsForProjectCommandOutput = await this.client.send(
+        new ListBuildsForProjectCommand({ projectName })
+      );
+
+      let ids = await results.ids;
+      return ids;
+    } catch (error) {
+      console.error(error);
+    }
+  }
 }
+
+// listBuildsForProject needed
+// ListProjects needed
