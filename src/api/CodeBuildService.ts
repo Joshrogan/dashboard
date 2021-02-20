@@ -5,8 +5,6 @@ import {
   BatchGetBuildsCommandOutput,
   ListBuildsForProjectCommand,
   ListBuildsForProjectCommandOutput,
-  ListProjectsCommand,
-  ListProjectsCommandOutput,
 } from '@aws-sdk/client-codebuild';
 import { BuildModel } from './CodeBuildModels';
 

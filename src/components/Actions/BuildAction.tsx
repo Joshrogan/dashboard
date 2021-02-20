@@ -4,6 +4,8 @@ import { ActionModel, PipelineModel, StageModel } from '../../api/CodePipelineMo
 import { CodeBuildService } from '../../api/CodeBuildService';
 import { CodeBuildClientConfig } from '@aws-sdk/client-codebuild';
 import { CONFIGURATION } from '../../config';
+import { BuildModel } from '../../api/CodeBuildModels';
+import BuildListComponent from './Build/BuildListComponent';
 
 type BuildActionProps = {
   action: ActionModel;
@@ -13,6 +15,7 @@ type BuildActionProps = {
 
 const BuildAction: React.FC<BuildActionProps> = ({ action, pipeline, stage }: BuildActionProps) => {
   const [config] = useState<CodeBuildClientConfig>(CONFIGURATION);
+  const [builds, setBuilds] = useState<BuildModel[]>([]);
 
   let buildProjectId = action.buildProject!;
 
@@ -20,12 +23,19 @@ const BuildAction: React.FC<BuildActionProps> = ({ action, pipeline, stage }: Bu
     const fetchData = async (): Promise<void> => {
       const codeBuildClient = new CodeBuildService(config);
       const buildIds = await codeBuildClient.listBuildsForProject(buildProjectId);
-      console.log('buildIds', buildIds);
+      const builds = await codeBuildClient.batchGetBuilds(buildIds);
+      setBuilds(builds);
     };
     fetchData();
   }, [config]);
 
-  return <div>{action.category}</div>;
+  return (
+    <div>
+      {builds.map((build) => (
+        <BuildListComponent build={build} />
+      ))}
+    </div>
+  );
 };
 
 export default BuildAction;
