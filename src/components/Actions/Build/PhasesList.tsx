@@ -10,6 +10,7 @@ import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { getStatusColor } from '../../pipelineUtils';
+import ReactTimeAgo from 'react-time-ago';
 import { PhaseModel } from '../../../api/CodeBuildModels';
 
 type PhasesListProps = {
@@ -24,6 +25,18 @@ const getStatusIcon = (status: string) => {
   return icon;
 };
 
+const getListItemText = (phase: PhaseModel) => {
+  let phaseType = phase.phaseType;
+  let phaseContextMessage = phase.contextMessage;
+  let phaseContextStatusCode = phase.contextStatusCode;
+
+  if (phaseContextMessage === '' || phaseContextStatusCode === '') {
+    return phaseType + 'start time: ' + String(phase.startTime);
+  } else if (phaseContextMessage !== undefined && phaseContextStatusCode !== undefined) {
+    return phaseContextMessage + phaseContextStatusCode;
+  }
+};
+
 const PhasesList: React.FC<PhasesListProps> = ({ phaseList }: PhasesListProps) => {
   const [open, setOpen] = React.useState(false);
 
@@ -31,6 +44,7 @@ const PhasesList: React.FC<PhasesListProps> = ({ phaseList }: PhasesListProps) =
     setOpen(!open);
   };
 
+  console.log('phaseList', phaseList);
   return (
     <List
       component="nav"
@@ -53,7 +67,7 @@ const PhasesList: React.FC<PhasesListProps> = ({ phaseList }: PhasesListProps) =
           {phaseList.map((phase) => (
             <ListItem button>
               <ListItemIcon>{getStatusIcon(phase.phaseStatus)}</ListItemIcon>
-              <ListItemText primary={phase.phaseType} />
+              <ListItemText>{getListItemText(phase)}</ListItemText>
             </ListItem>
           ))}
         </List>
