@@ -1,4 +1,4 @@
-export interface PhasesModel {
+export interface PhaseModel {
   contextMessage?: string;
   contextStatusCode?: string;
   phaseStatus: string;
@@ -15,7 +15,7 @@ export interface BuildModel {
   sourceVersion: string;
   duration: number;
   completed: boolean;
-  phases: PhasesModel[];
+  phases: PhaseModel[];
 }
 
 // logs and phases todo

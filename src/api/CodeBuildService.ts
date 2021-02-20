@@ -6,7 +6,7 @@ import {
   ListBuildsForProjectCommand,
   ListBuildsForProjectCommandOutput,
 } from '@aws-sdk/client-codebuild';
-import { BuildModel } from './CodeBuildModels';
+import { BuildModel, PhaseModel } from './CodeBuildModels';
 
 export class CodeBuildService {
   private client: CodeBuildClient;
@@ -30,7 +30,26 @@ export class CodeBuildService {
             sourceVersion: build.sourceVersion!,
             duration: totalDuration!,
             completed: build.buildComplete!,
-          } as BuildModel;
+            phases: build.phases!.map((phase) => {
+              let contextMessage = '';
+              let contextStatus = '';
+              if (phase.contexts) {
+                if (phase.contexts[0].message !== undefined && phase.contexts[0].statusCode !== undefined) {
+                  contextMessage = phase.contexts![0].message!;
+                  contextStatus = phase.contexts![0].statusCode!;
+                }
+              }
+              return {
+                contextMessage: contextMessage,
+                contextStatusCode: contextStatus,
+                phaseStatus: phase.phaseStatus,
+                phaseType: phase.phaseType,
+                durationinSeconds: phase.durationInSeconds,
+                startTime: phase.startTime,
+                endTime: phase.endTime,
+              } as PhaseModel;
+            }),
+          };
         });
 
         return builds;
