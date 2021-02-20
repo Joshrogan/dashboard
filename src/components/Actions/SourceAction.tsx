@@ -4,11 +4,12 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import ReactTimeAgo from 'react-time-ago';
-import { getActionStatusColor } from '../pipelineUtils';
+import { getStatusColor } from '../pipelineUtils';
 import Link from '@material-ui/core/Link';
 import LaunchIcon from '@material-ui/icons/Launch';
 
 import { ActionModel, PipelineModel, StageModel } from '../../api/CodePipelineModels';
+import Stage from '../Stage';
 
 type SourceActionProps = {
   action: ActionModel;
@@ -22,7 +23,7 @@ const useStyles = makeStyles<Theme, StageModel>((theme) =>
       padding: '8px',
     },
     cardHeader: {
-      backgroundColor: (stage) => getActionStatusColor(stage),
+      backgroundColor: (stage) => getStatusColor(stage.status ? stage.status : 'default'),
       borderBottom: '1px solid black',
     },
     card: {

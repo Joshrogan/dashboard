@@ -1,9 +1,10 @@
 import React from 'react';
-import { ActionModel, PipelineModel, StageModel } from '../../../api/CodePipelineModels';
 import { BuildModel } from '../../../api/CodeBuildModels';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
+import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
+import { getStatusColor } from '../../pipelineUtils';
 
 type BuildListComponentProps = {
   build: BuildModel;
@@ -15,17 +16,35 @@ function millisToMinutesAndSeconds(millis: number): string {
   return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
 }
 
+const useStyles = makeStyles<Theme, BuildListComponentProps>((theme) =>
+  createStyles({
+    root: {
+      padding: '8px',
+    },
+    cardHeader: {
+      backgroundColor: ({ build }) => getStatusColor(build.buildStatus),
+      borderBottom: '1px solid black',
+    },
+    card: {
+      backgroundColor: 'FloralWhite',
+    },
+  })
+);
+
 const BuildListComponent: React.FC<BuildListComponentProps> = ({ build }: BuildListComponentProps) => {
+  const classes = useStyles({ build });
+
   console.log('build', build);
   return (
     <div>
       <Card raised={true}>
         <CardHeader
+          className={classes.cardHeader}
           title={build.buildRun}
           subheader={'Build No: ' + build.buildNumber + '. Status: ' + build.buildStatus}
         />
         <CardContent>
-          {'duration: '}
+          {'Build duration: '}
           {millisToMinutesAndSeconds(build.duration)}
         </CardContent>
         <CardContent>{build.sourceVersion}</CardContent>

@@ -21,7 +21,7 @@ const useStyles = makeStyles<Theme, PipelineProps>((theme) =>
       padding: '8px',
     },
     cardHeader: {
-      backgroundColor: ({ pipeline }) => getStatusColor(pipeline),
+      backgroundColor: ({ pipeline }) => getStatusColor(pipeline?.status ? pipeline.status : 'undefined'),
       borderBottom: '1px solid black',
     },
     card: {
