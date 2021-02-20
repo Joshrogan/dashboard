@@ -21,6 +21,7 @@ export class CodeBuildService {
 
       if (results.builds !== undefined) {
         const builds: BuildModel[] = results.builds.map((build) => {
+          console.log('build', build);
           let totalDuration: any = build.endTime!.valueOf() - build.startTime!.valueOf();
           return {
             buildRun: build.id!,

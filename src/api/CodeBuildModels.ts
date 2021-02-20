@@ -1,3 +1,13 @@
+export interface PhasesModel {
+  contextMessage?: string;
+  contextStatusCode?: string;
+  phaseStatus: string;
+  phaseType: string;
+  durationinSeconds: number;
+  startTime: Date;
+  endTime: Date;
+}
+
 export interface BuildModel {
   buildRun: string;
   buildStatus: string;
@@ -5,6 +15,7 @@ export interface BuildModel {
   sourceVersion: string;
   duration: number;
   completed: boolean;
+  phases: PhasesModel[];
 }
 
 // logs and phases todo

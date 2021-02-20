@@ -8,7 +8,7 @@ import { getStatusColor, getS3Link } from '../../pipelineUtils';
 import Link from '@material-ui/core/Link';
 import Button from '@material-ui/core/Button';
 
-type BuildListComponentProps = {
+type BuildMoreInfoProps = {
   build: BuildModel;
 };
 
@@ -18,7 +18,7 @@ function millisToMinutesAndSeconds(millis: number): string {
   return minutes + ':' + (seconds < 10 ? '0' : '') + seconds;
 }
 
-const useStyles = makeStyles<Theme, BuildListComponentProps>((theme) =>
+const useStyles = makeStyles<Theme, BuildMoreInfoProps>((theme) =>
   createStyles({
     root: {
       marginBottom: '1em',
@@ -33,7 +33,7 @@ const useStyles = makeStyles<Theme, BuildListComponentProps>((theme) =>
   })
 );
 
-const BuildListComponent: React.FC<BuildListComponentProps> = ({ build }: BuildListComponentProps) => {
+const BuildMoreInfo: React.FC<BuildMoreInfoProps> = ({ build }: BuildMoreInfoProps) => {
   const classes = useStyles({ build });
 
   let bucketLink = getS3Link(build.sourceVersion);
@@ -64,4 +64,4 @@ const BuildListComponent: React.FC<BuildListComponentProps> = ({ build }: BuildL
   );
 };
 
-export default BuildListComponent;
+export default BuildMoreInfoProps;
