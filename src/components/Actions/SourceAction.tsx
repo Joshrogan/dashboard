@@ -9,7 +9,6 @@ import Link from '@material-ui/core/Link';
 import LaunchIcon from '@material-ui/icons/Launch';
 
 import { ActionModel, PipelineModel, StageModel } from '../../api/CodePipelineModels';
-import Stage from '../Stage';
 
 type SourceActionProps = {
   action: ActionModel;

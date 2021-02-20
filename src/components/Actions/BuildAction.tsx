@@ -17,7 +17,7 @@ const BuildAction: React.FC<BuildActionProps> = ({ action, pipeline, stage }: Bu
   const [config] = useState<CodeBuildClientConfig>(CONFIGURATION);
   const [builds, setBuilds] = useState<BuildModel[]>([]);
 
-  let buildProjectId = action.buildProject!;
+  const buildProjectId = action.buildProject!;
 
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
@@ -28,7 +28,7 @@ const BuildAction: React.FC<BuildActionProps> = ({ action, pipeline, stage }: Bu
       console.log('builds buildsAction', builds);
     };
     fetchData();
-  }, [config]);
+  }, [config, buildProjectId]);
 
   return (
     <div>

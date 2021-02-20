@@ -8,15 +8,24 @@ import Collapse from '@material-ui/core/Collapse';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import ExpandLess from '@material-ui/icons/ExpandLess';
 import ExpandMore from '@material-ui/icons/ExpandMore';
-import StarBorder from '@material-ui/icons/StarBorder';
+import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
+import { getStatusColor } from '../../pipelineUtils';
 import { PhaseModel } from '../../../api/CodeBuildModels';
 
 type PhasesListProps = {
   phaseList: PhaseModel[];
 };
 
+const getStatusIcon = (status: string) => {
+  let color = getStatusColor(status);
+
+  let icon = <FiberManualRecordIcon style={{ color: color }} />;
+
+  return icon;
+};
+
 const PhasesList: React.FC<PhasesListProps> = ({ phaseList }: PhasesListProps) => {
-  const [open, setOpen] = React.useState(true);
+  const [open, setOpen] = React.useState(false);
 
   const handleClick = () => {
     setOpen(!open);
@@ -28,7 +37,7 @@ const PhasesList: React.FC<PhasesListProps> = ({ phaseList }: PhasesListProps) =
       aria-labelledby="nested-list-subheader"
       subheader={
         <ListSubheader component="div" id="nested-list-subheader">
-          Nested List Items
+          Phases
         </ListSubheader>
       }
     >
@@ -36,17 +45,17 @@ const PhasesList: React.FC<PhasesListProps> = ({ phaseList }: PhasesListProps) =
         <ListItemIcon>
           <InboxIcon />
         </ListItemIcon>
-        <ListItemText primary="Inbox" />
+        <ListItemText primary="Click to expand phase list" />
         {open ? <ExpandLess /> : <ExpandMore />}
       </ListItem>
       <Collapse in={open} timeout="auto" unmountOnExit>
         <List component="div" disablePadding>
-          <ListItem button>
-            <ListItemIcon>
-              <StarBorder />
-            </ListItemIcon>
-            <ListItemText primary="Starred" />
-          </ListItem>
+          {phaseList.map((phase) => (
+            <ListItem button>
+              <ListItemIcon>{getStatusIcon(phase.phaseStatus)}</ListItemIcon>
+              <ListItemText primary={phase.phaseType} />
+            </ListItem>
+          ))}
         </List>
       </Collapse>
     </List>
