@@ -1,5 +1,6 @@
 import { PipelineExecutionStatus } from '@aws-sdk/client-codepipeline';
 import { StatusType } from '@aws-sdk/client-codebuild';
+import { CONFIGURATION } from '../config';
 
 const getStatusColor = (status: string): string => {
   switch (status) {
@@ -26,4 +27,16 @@ const getStatusColor = (status: string): string => {
   }
 };
 
-export { getStatusColor };
+const getS3Link = (bucket: string): string => {
+  let bucketSplit = bucket.split('arn:aws:s3:::')[1];
+
+  let lastIndexSlash = bucketSplit.lastIndexOf('/');
+
+  let bucketName = bucketSplit.substr(0, lastIndexSlash);
+
+  let prefixSearch = bucketSplit.substr(lastIndexSlash + 1);
+
+  return `https://${CONFIGURATION.region}.console.aws.amazon.com/s3/buckets/${bucketName}/?region=${CONFIGURATION.region}&tab=overview$prefixSearch=${prefixSearch}`;
+};
+
+export { getStatusColor, getS3Link };

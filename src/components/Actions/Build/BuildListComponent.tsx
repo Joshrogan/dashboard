@@ -4,7 +4,8 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { getStatusColor } from '../../pipelineUtils';
+import { getStatusColor, getS3Link } from '../../pipelineUtils';
+import Link from '@material-ui/core/Link';
 
 type BuildListComponentProps = {
   build: BuildModel;
@@ -35,6 +36,7 @@ const BuildListComponent: React.FC<BuildListComponentProps> = ({ build }: BuildL
   const classes = useStyles({ build });
 
   console.log('build', build);
+  let bucketLink = getS3Link(build.sourceVersion);
   return (
     <div>
       <Card raised={true}>
@@ -48,6 +50,10 @@ const BuildListComponent: React.FC<BuildListComponentProps> = ({ build }: BuildL
           {millisToMinutesAndSeconds(build.duration)}
         </CardContent>
         <CardContent>{build.sourceVersion}</CardContent>
+        <CardContent>
+          {' '}
+          <Link href={bucketLink}>{bucketLink}</Link>
+        </CardContent>
       </Card>
     </div>
   );
