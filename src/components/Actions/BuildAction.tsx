@@ -3,6 +3,8 @@ import { useState, useEffect } from 'react';
 import { ActionModel, PipelineModel, StageModel } from '../../api/CodePipelineModels';
 import { CodeBuildService } from '../../api/CodeBuildService';
 import { CodeBuildClientConfig } from '@aws-sdk/client-codebuild';
+import { CloudWatchLogsService } from '../../api/CloudWatchLogsService';
+import { CloudWatchLogsClientConfig } from '@aws-sdk/client-cloudwatch-logs';
 import { CONFIGURATION } from '../../config';
 import { BuildModel } from '../../api/CodeBuildModels';
 import BuildListComponent from './Build/BuildListComponent';
@@ -22,8 +24,11 @@ const BuildAction: React.FC<BuildActionProps> = ({ action, pipeline, stage }: Bu
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
       const codeBuildClient = new CodeBuildService(config);
+      const CloudWatchLogsClient = new CloudWatchLogsService(config);
       const buildIds = await codeBuildClient.listBuildsForProject(buildProjectId);
-      const builds = await codeBuildClient.batchGetBuilds(buildIds);
+      const builds: BuildModel[] = await codeBuildClient.batchGetBuilds(buildIds);
+      const logs = await CloudWatchLogsClient.getLogEvents(builds[0].logs?.groupName, builds[0].logs?.streamName);
+      console.log('logs', logs);
       setBuilds(builds);
     };
     fetchData();

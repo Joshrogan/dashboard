@@ -21,7 +21,6 @@ export class CodeBuildService {
 
       if (results.builds !== undefined) {
         const builds: BuildModel[] = results.builds.map((build) => {
-          console.log('build', build);
           let totalDuration: any = build.endTime!.valueOf() - build.startTime!.valueOf();
           return {
             buildRun: build.id!,
@@ -49,9 +48,16 @@ export class CodeBuildService {
                 endTime: phase.endTime,
               } as PhaseModel;
             }),
+            logs: {
+              cloudWatchLogsArn: build.logs?.cloudWatchLogsArn!,
+              deepLink: build.logs?.deepLink!,
+              groupName: build.logs?.groupName!,
+              streamName: build.logs?.streamName!,
+            },
           };
         });
 
+        console.log('builds', builds);
         return builds;
       }
     } catch (error) {

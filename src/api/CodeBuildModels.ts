@@ -1,3 +1,10 @@
+export interface LogModel {
+  cloudWatchLogsArn: string;
+  deepLink: string;
+  groupName: string;
+  streamName: string;
+}
+
 export interface PhaseModel {
   contextMessage?: string;
   contextStatusCode?: string;
@@ -16,6 +23,7 @@ export interface BuildModel {
   duration: number;
   completed: boolean;
   phases: PhaseModel[];
+  logs?: LogModel;
 }
 
 // logs and phases todo

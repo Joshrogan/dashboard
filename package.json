@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@aws-sdk/client-cloudwatch-logs": "^3.6.0",
     "@aws-sdk/client-codebuild": "^3.5.0",
     "@aws-sdk/client-codepipeline": "^3.4.1",
     "@material-ui/core": "^4.11.3",
