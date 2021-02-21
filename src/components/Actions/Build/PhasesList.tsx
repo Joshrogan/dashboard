@@ -12,6 +12,7 @@ import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { getStatusColor } from '../../pipelineUtils';
 import ReactTimeAgo from 'react-time-ago';
 import { PhaseModel } from '../../../api/CodeBuildModels';
+import { renderToString } from 'react-dom/server';
 
 type PhasesListProps = {
   phaseList: PhaseModel[];
@@ -35,6 +36,22 @@ const getListItemText = (phase: PhaseModel) => {
   } else if (phaseContextMessage !== undefined && phaseContextStatusCode !== undefined) {
     return phaseContextMessage + phaseContextStatusCode;
   }
+};
+
+const getListTextSecondary = (phase: PhaseModel) => {
+  let startTime = <ReactTimeAgo date={phase.startTime} />;
+
+  let startTimeRender = renderToString(startTime);
+
+  let startTimeSpan = <span dangerouslySetInnerHTML={{ __html: startTimeRender }}></span>;
+  let duration = <span>{` duration: ${phase.durationinSeconds} seconds`}</span>;
+  return (
+    <div>
+      {'Started: '}
+      {startTimeSpan}
+      {duration}
+    </div>
+  );
 };
 
 const PhasesList: React.FC<PhasesListProps> = ({ phaseList }: PhasesListProps) => {
@@ -67,7 +84,7 @@ const PhasesList: React.FC<PhasesListProps> = ({ phaseList }: PhasesListProps) =
           {phaseList.map((phase) => (
             <ListItem button>
               <ListItemIcon>{getStatusIcon(phase.phaseStatus)}</ListItemIcon>
-              <ListItemText>{getListItemText(phase)}</ListItemText>
+              <ListItemText secondary={getListTextSecondary(phase)}>{getListItemText(phase)}</ListItemText>
             </ListItem>
           ))}
         </List>
