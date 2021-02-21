@@ -60,7 +60,6 @@ export class CodePipelineService {
       const pipelineExecution = await this.getPipelineExecution(pipelineName, pipelineExecutionId!);
       let pipelineStatus = pipelineExecution?.pipelineExecution?.status;
 
-      console.log('pipelineResult', pipelineResult);
       if (pipelineResult && stageResult) {
         const pipeline: PipelineModel = {
           pipelineName: pipelineResult.name!,
@@ -69,7 +68,6 @@ export class CodePipelineService {
           status: pipelineStatus,
           pipelineExecutionSummary: pipelineExecutionInfo,
           stages: stageResult.map((stage) => {
-            console.log('stages', stage);
             return {
               stageName: stage.name!,
               actions: stage.actions!.map((action) => {

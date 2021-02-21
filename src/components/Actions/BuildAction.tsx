@@ -25,7 +25,6 @@ const BuildAction: React.FC<BuildActionProps> = ({ action, pipeline, stage }: Bu
       const buildIds = await codeBuildClient.listBuildsForProject(buildProjectId);
       const builds = await codeBuildClient.batchGetBuilds(buildIds);
       setBuilds(builds);
-      console.log('builds buildsAction', builds);
     };
     fetchData();
   }, [config, buildProjectId]);

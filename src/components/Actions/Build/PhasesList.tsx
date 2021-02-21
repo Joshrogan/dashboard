@@ -13,6 +13,7 @@ import { getStatusColor } from '../../pipelineUtils';
 import ReactTimeAgo from 'react-time-ago';
 import { PhaseModel } from '../../../api/CodeBuildModels';
 import { renderToString } from 'react-dom/server';
+import { Typography } from '@material-ui/core/';
 
 type PhasesListProps = {
   phaseList: PhaseModel[];
@@ -31,25 +32,36 @@ const getListItemText = (phase: PhaseModel) => {
   let phaseContextMessage = phase.contextMessage;
   let phaseContextStatusCode = phase.contextStatusCode;
 
+  let phaseTypeText = <Typography style={{ fontWeight: 'bold' }}>{phaseType}</Typography>;
+
+  let ContextMessage = (
+    <Typography>
+      {phaseTypeText}
+      {`Message: ${phaseContextMessage} | Status Code: ${phaseContextStatusCode}`}
+    </Typography>
+  );
+
   if (phaseContextMessage === '' || phaseContextStatusCode === '') {
-    return phaseType + 'start time: ' + String(phase.startTime);
+    return phaseType;
   } else if (phaseContextMessage !== undefined && phaseContextStatusCode !== undefined) {
-    return phaseContextMessage + phaseContextStatusCode;
+    console.log(phaseType);
+    return ContextMessage;
   }
 };
 
 const getListTextSecondary = (phase: PhaseModel) => {
   let startTime = <ReactTimeAgo date={phase.startTime} />;
+  let duration = phase.durationinSeconds ? phase.durationinSeconds : 0;
 
   let startTimeRender = renderToString(startTime);
 
   let startTimeSpan = <span dangerouslySetInnerHTML={{ __html: startTimeRender }}></span>;
-  let duration = <span>{` duration: ${phase.durationinSeconds} seconds`}</span>;
+  let durationSpan = <span>{` duration: ${duration} seconds`}</span>;
   return (
     <div>
       {'Started: '}
       {startTimeSpan}
-      {duration}
+      {durationSpan}
     </div>
   );
 };

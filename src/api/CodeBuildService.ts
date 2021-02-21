@@ -60,9 +60,7 @@ export class CodeBuildService {
   }
 
   public async listBuildsForProject(projectName: string): Promise<any> {
-    console.log('proj name', projectName);
     try {
-      console.log('proj name inside try', projectName);
       const results: ListBuildsForProjectCommandOutput = await this.client.send(
         new ListBuildsForProjectCommand({ projectName })
       );

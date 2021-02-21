@@ -55,7 +55,6 @@ const BuildListComponent: React.FC<BuildListComponentProps> = ({ build }: BuildL
           {'Build duration: '}
           {millisToMinutesAndSeconds(build.duration)}
         </CardContent>
-        <CardContent>{build.sourceVersion}</CardContent>
         <CardContent>
           {' '}
           <Link href={bucketLink}>{'S3 Source Version'}</Link>
