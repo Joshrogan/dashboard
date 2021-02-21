@@ -42,9 +42,8 @@ const getListItemText = (phase: PhaseModel) => {
   );
 
   if (phaseContextMessage === '' || phaseContextStatusCode === '') {
-    return phaseType;
+    return phaseTypeText;
   } else if (phaseContextMessage !== undefined && phaseContextStatusCode !== undefined) {
-    console.log(phaseType);
     return ContextMessage;
   }
 };
@@ -73,7 +72,6 @@ const PhasesList: React.FC<PhasesListProps> = ({ phaseList }: PhasesListProps) =
     setOpen(!open);
   };
 
-  console.log('phaseList', phaseList);
   return (
     <List
       component="nav"

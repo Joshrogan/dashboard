@@ -45,18 +45,12 @@ const BuildListComponent: React.FC<BuildListComponentProps> = ({ build }: BuildL
           className={classes.cardHeader}
           title={build.buildRun}
           subheader={'Build No: ' + build.buildNumber + '. Status: ' + build.buildStatus}
-          action={
-            <Button size="small" color="primary" variant="contained">
-              More Info
-            </Button>
-          }
         />
         <CardContent>
           {'Build duration: '}
           {millisToMinutesAndSeconds(build.duration)}
         </CardContent>
         <CardContent>
-          {' '}
           <Link href={bucketLink}>{'S3 Source Version'}</Link>
         </CardContent>
         <CardContent>

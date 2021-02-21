@@ -44,11 +44,6 @@ const BuildMoreInfo: React.FC<BuildMoreInfoProps> = ({ build }: BuildMoreInfoPro
           className={classes.cardHeader}
           title={build.buildRun}
           subheader={'Build No: ' + build.buildNumber + '. Status: ' + build.buildStatus}
-          action={
-            <Button size="small" color="primary" variant="contained">
-              More Info
-            </Button>
-          }
         />
         <CardContent>
           {'Build duration: '}
@@ -56,7 +51,6 @@ const BuildMoreInfo: React.FC<BuildMoreInfoProps> = ({ build }: BuildMoreInfoPro
         </CardContent>
         <CardContent>{build.sourceVersion}</CardContent>
         <CardContent>
-          {' '}
           <Link href={bucketLink}>{'S3 Source Version'}</Link>
         </CardContent>
       </Card>
