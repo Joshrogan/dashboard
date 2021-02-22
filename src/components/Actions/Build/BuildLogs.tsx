@@ -1,19 +1,25 @@
 import React from 'react';
-import { BuildModel } from '../../../api/CodeBuildModels';
-import Card from '@material-ui/core/Card';
-import CardContent from '@material-ui/core/CardContent';
-import CardHeader from '@material-ui/core/CardHeader';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import { getStatusColor, getS3Link } from '../../pipelineUtils';
-import Link from '@material-ui/core/Link';
-import Button from '@material-ui/core/Button';
+import Accordion from '@material-ui/core/Accordion';
+import Typography from '@material-ui/core/Typography';
+import { LogModel } from '../../../api/CodeBuildModels';
 
 type BuildLogsProps = {
-  build: BuildModel;
+  logs?: LogModel[];
 };
 
-const BuildLogs: React.FC<BuildLogsProps> = ({ build }: BuildLogsProps) => {
-  return <div>Hello World</div>;
+const BuildLogs: React.FC<BuildLogsProps> = ({ logs }: BuildLogsProps) => {
+  console.log('in logs!', logs);
+  if (logs !== undefined) {
+    return (
+      <Accordion>
+        {logs.map((log) => {
+          return <Typography>{log.message}</Typography>;
+        })}
+      </Accordion>
+    );
+  } else {
+    return <div>{'Hello World!'}</div>;
+  }
 };
 
 export default BuildLogs;

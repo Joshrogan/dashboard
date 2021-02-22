@@ -1,4 +1,9 @@
 export interface LogModel {
+  message: string;
+  timestamp: string;
+}
+
+export interface CloudWatchModel {
   cloudWatchLogsArn: string;
   deepLink: string;
   groupName: string;
@@ -23,7 +28,8 @@ export interface BuildModel {
   duration: number;
   completed: boolean;
   phases: PhaseModel[];
-  logs?: LogModel;
+  cloudWatch?: CloudWatchModel;
+  logs?: LogModel[];
 }
 
 // logs and phases todo

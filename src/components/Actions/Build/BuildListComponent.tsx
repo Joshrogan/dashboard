@@ -7,6 +7,7 @@ import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import { getStatusColor, getS3Link } from '../../pipelineUtils';
 import Link from '@material-ui/core/Link';
 import PhasesList from './PhasesList';
+import BuildLogs from './BuildLogs';
 
 type BuildListComponentProps = {
   build: BuildModel;
@@ -55,7 +56,9 @@ const BuildListComponent: React.FC<BuildListComponentProps> = ({ build }: BuildL
         <CardContent>
           <PhasesList phaseList={build.phases} />
         </CardContent>
-        <CardContent></CardContent>
+        <CardContent>
+          <BuildLogs logs={build.logs} />
+        </CardContent>
       </Card>
     </div>
   );

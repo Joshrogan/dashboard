@@ -26,16 +26,17 @@ const BuildAction: React.FC<BuildActionProps> = ({ action, pipeline, stage }: Bu
       const CloudWatchLogsClient = new CloudWatchLogsService(config);
       const buildIds = await codeBuildClient.listBuildsForProject(buildProjectId);
       let builds: BuildModel[] = await codeBuildClient.batchGetBuilds(buildIds);
-      builds = await Promise.all(
+      let buildsWithLogs: BuildModel[] = await Promise.all(
         builds.map(async (build) => {
           return {
             ...build,
-            logs: await CloudWatchLogsClient.getLogEvents(build.logs?.groupName, build.logs?.streamName),
+            logs: await CloudWatchLogsClient.getLogEvents(build.cloudWatch?.groupName, build.cloudWatch?.streamName)!,
           };
         })
       );
-      setBuilds(builds);
-      console.log('builds', builds);
+      console.log('buildsWithLogs', buildsWithLogs);
+
+      setBuilds(buildsWithLogs);
     };
     fetchData();
   }, [config, buildProjectId]);

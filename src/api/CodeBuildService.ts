@@ -48,7 +48,7 @@ export class CodeBuildService {
                 endTime: phase.endTime,
               } as PhaseModel;
             }),
-            logs: {
+            cloudWatch: {
               cloudWatchLogsArn: build.logs?.cloudWatchLogsArn!,
               deepLink: build.logs?.deepLink!,
               groupName: build.logs?.groupName!,
