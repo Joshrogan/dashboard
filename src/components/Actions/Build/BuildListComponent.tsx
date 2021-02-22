@@ -55,6 +55,7 @@ const BuildListComponent: React.FC<BuildListComponentProps> = ({ build }: BuildL
         <CardContent>
           <PhasesList phaseList={build.phases} />
         </CardContent>
+        <CardContent></CardContent>
       </Card>
     </div>
   );

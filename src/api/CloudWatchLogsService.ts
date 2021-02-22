@@ -18,7 +18,16 @@ export class CloudWatchLogsService {
         new GetLogEventsCommand({ logGroupName, logStreamName })
       );
 
-      return results;
+      if (results.events !== undefined) {
+        let parsed = results.events.map((log) => {
+          return {
+            timestamp: new Date(log.timestamp!).toISOString(),
+            message: log.message,
+          };
+        });
+
+        return parsed;
+      }
     } catch (error) {}
   }
 }
