@@ -6,6 +6,8 @@ export interface ActionModel {
   branch?: string;
   status?: string;
   buildProject?: string;
+  lastUpdated?: Date;
+  entityUrl?: string;
 }
 
 export interface StageModel {

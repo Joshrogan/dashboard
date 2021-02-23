@@ -18,7 +18,7 @@ const Action: Function = (Props: ActionProps) => {
     case 'Build':
       return <BuildAction action={action} pipeline={pipeline} stage={stage} />;
     case 'Deploy':
-      return <DeployAction action={action} />;
+      return <DeployAction action={action} pipeline={pipeline} stage={stage} />;
     case 'Source':
       return <SourceAction action={action} pipeline={pipeline} stage={stage} />;
   }

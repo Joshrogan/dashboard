@@ -54,6 +54,7 @@ export class CodePipelineService {
 
       const pipelineExecutionInfo = await this.getPipelineExecutionInfo(pipelineName);
 
+      console.log(pipelineExecutionInfo, 'pipelineexecutioninfo');
       const pipelineState: GetPipelineStateCommandOutput = await this.getPipelineState(pipelineName);
       let pipelineExecutionId = pipelineState.stageStates![0].latestExecution!.pipelineExecutionId;
 
@@ -88,6 +89,7 @@ export class CodePipelineService {
         if (pipelineStageStates.stageStates !== undefined) {
           let stageStates: StageState[] = pipelineStageStates.stageStates;
           let newStages: StageModel[] = pipeline.stages.map((stage) => {
+            console.log('stage States', stageStates);
             let findStage = stageStates.find((tempStage) => {
               return tempStage.stageName === stage.stageName;
             });
@@ -96,6 +98,8 @@ export class CodePipelineService {
                 ...action,
                 status: findStage?.actionStates![0].latestExecution?.status,
                 actionId: findStage?.actionStates![0].latestExecution?.externalExecutionId,
+                lastUpdated: findStage?.actionStates![0].latestExecution?.lastStatusChange,
+                entityUrl: findStage?.actionStates![0].entityUrl,
               };
             });
             let newStage: StageModel = {
