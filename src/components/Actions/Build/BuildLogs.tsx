@@ -19,8 +19,6 @@ type BuildLogsProps = {
 };
 
 const BuildLogs: React.FC<BuildLogsProps> = ({ logs }: BuildLogsProps) => {
-  console.log('in logs!', logs);
-
   if (logs !== undefined) {
     let blurb = logs.map((log) => {
       return log.message;

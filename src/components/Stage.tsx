@@ -9,13 +9,16 @@ import { TreeItem } from '@material-ui/lab';
 import CheckIcon from '@material-ui/icons/Check';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { green, red } from '@material-ui/core/colors';
+import { Button } from '@material-ui/core';
+import { CodePipelineService } from '../api/CodePipelineService';
 
 type StageProps = {
   stage: StageModel;
   pipeline: PipelineModel;
+  pipelineClient: CodePipelineService;
 };
 
-const Stage: React.FC<StageProps> = ({ stage, pipeline }: StageProps) => {
+const Stage: React.FC<StageProps> = ({ stage, pipeline, pipelineClient }: StageProps) => {
   if (stage === undefined || pipeline === undefined || stage.actions === undefined) {
     return null;
   }
@@ -28,21 +31,33 @@ const Stage: React.FC<StageProps> = ({ stage, pipeline }: StageProps) => {
     stage.status === 'Succeeded' ? (
       <CheckIcon style={{ color: green[500] }} />
     ) : (
-      <ErrorOutlineIcon style={{ color: red[500] }} />
+      <>
+        <ErrorOutlineIcon style={{ color: red[500] }} />
+        &nbsp;
+        <Button
+          color="secondary"
+          variant="outlined"
+          onClick={() =>
+            pipelineClient.retryStageExecution(pipeline.pipelineName, stage.stageName, pipeline.pipelineExecutionId!)
+          }
+        >
+          Retry stage
+        </Button>
+      </>
     );
 
   let stageLabel = (
     <div
       style={{
         display: 'flex',
-        alignItems: 'center',
-        flexWrap: 'wrap',
+        justifyContent: 'space-between',
       }}
     >
+      {stageName}
       <span>
-        {stageName}&nbsp;{'Status: '}
-      </span>{' '}
-      {icon}
+        &nbsp;{`Status: ${stage.status}`}
+        {icon}
+      </span>
     </div>
   );
 

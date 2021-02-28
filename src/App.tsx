@@ -21,10 +21,10 @@ function App() {
     iname: 'none',
     show: false,
   });
+  const codePipelineClient = new CodePipelineService(config);
 
   useEffect(() => {
     const fetchData = async (): Promise<void> => {
-      const codePipelineClient = new CodePipelineService(config);
       const currentPipelines = await codePipelineClient.listPipelines();
 
       if (currentPipelines !== undefined) {
@@ -50,7 +50,10 @@ function App() {
     <Container maxWidth="lg">
       <Typography variant="h2">{'My Pipelines'}</Typography>
       {showChild.show ? (
-        <Stages pipeline={pipelines.find((pipeline) => pipeline.pipelineName === showChild.iname)} />
+        <Stages
+          pipeline={pipelines.find((pipeline) => pipeline.pipelineName === showChild.iname)}
+          pipelineClient={codePipelineClient}
+        />
       ) : (
         pipelines?.map((pipeline) => (
           <Pipeline

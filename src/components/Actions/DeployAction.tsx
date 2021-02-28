@@ -71,6 +71,10 @@ const DeployAction: React.FC<DeployActionProps> = ({ action, pipeline, stage }: 
             </Link>
           }
         </CardContent>
+        <CardContent>
+          {'Entity URL: '}
+          {<Link href={action.entityUrl}>{action.entityUrl}</Link>}
+        </CardContent>
       </Card>
     </div>
   );

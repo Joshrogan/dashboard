@@ -15,6 +15,10 @@ import {
   ListPipelineExecutionsOutput,
   PipelineExecutionSummary,
   StageState,
+  StartPipelineExecutionCommand,
+  StartPipelineExecutionCommandOutput,
+  RetryStageExecutionCommand,
+  RetryStageExecutionCommandOutput,
 } from '@aws-sdk/client-codepipeline';
 import { PipelineModel, PipelineExecutionSummaryModel, StageModel, ActionModel } from './CodePipelineModels';
 
@@ -174,6 +178,30 @@ export class CodePipelineService {
     try {
       const results: GetPipelineStateCommandOutput = await this.client.send(
         new GetPipelineStateCommand({ name: pipelineName })
+      );
+
+      return results;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  public async startPipelineExecution(pipelineName: string): Promise<any> {
+    try {
+      const results: StartPipelineExecutionCommandOutput = await this.client.send(
+        new StartPipelineExecutionCommand({ name: pipelineName })
+      );
+
+      return results;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  public async retryStageExecution(pipelineName: string, stageName: string, pipelineExecutionId: string): Promise<any> {
+    try {
+      const results: RetryStageExecutionCommandOutput = await this.client.send(
+        new RetryStageExecutionCommand({ pipelineName, stageName, pipelineExecutionId, retryMode: 'FAILED_ACTIONS' })
       );
 
       return results;

@@ -4,13 +4,16 @@ import Stage from './Stage';
 import CheckIcon from '@material-ui/icons/Check';
 import ErrorOutlineIcon from '@material-ui/icons/ErrorOutline';
 import { green, red } from '@material-ui/core/colors';
+import Button from '@material-ui/core/Button';
+import { CodePipelineService } from '../api/CodePipelineService';
 
 type StagesProps = {
   pipeline: PipelineModel | undefined;
+  pipelineClient: CodePipelineService;
 };
 
-const Stages: React.FC<StagesProps> = ({ pipeline }: StagesProps) => {
-  if (pipeline === undefined) {
+const Stages: React.FC<StagesProps> = ({ pipeline, pipelineClient }: StagesProps) => {
+  if (pipeline === undefined || pipelineClient === undefined) {
     return null;
   }
 
@@ -27,14 +30,21 @@ const Stages: React.FC<StagesProps> = ({ pipeline }: StagesProps) => {
     <div
       style={{
         display: 'flex',
-        alignItems: 'center',
-        flexWrap: 'wrap',
+        justifyContent: 'space-between',
       }}
     >
       <span>
-        {pipeline.pipelineName}&nbsp;{'Overall Status: '}
+        {pipeline.pipelineName}&nbsp;{`Overall Status: ${pipeline.status} `}
+        {icon}
       </span>{' '}
-      {icon}
+      <Button
+        size="small"
+        color="primary"
+        variant="outlined"
+        onClick={() => pipelineClient.startPipelineExecution(pipeline.pipelineName)}
+      >
+        Restart This Pipeline
+      </Button>
     </div>
   );
 
@@ -43,7 +53,7 @@ const Stages: React.FC<StagesProps> = ({ pipeline }: StagesProps) => {
       {header}
 
       {stages.map((stage) => (
-        <Stage key={stage.stageName} stage={stage} pipeline={pipeline} />
+        <Stage key={stage.stageName} stage={stage} pipeline={pipeline} pipelineClient={pipelineClient} />
       ))}
     </div>
   );
