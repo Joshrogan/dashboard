@@ -1,6 +1,7 @@
 import BuildAction from './BuildAction';
 import DeployAction from './DeployAction';
 import SourceAction from './SourceAction';
+import ApprovalAction from './ApprovalAction';
 import { ActionModel, PipelineModel, StageModel } from '../../api/CodePipelineModels';
 
 type ActionProps = {
@@ -21,6 +22,8 @@ const Action: Function = (Props: ActionProps) => {
       return <DeployAction action={action} pipeline={pipeline} stage={stage} />;
     case 'Source':
       return <SourceAction action={action} pipeline={pipeline} stage={stage} />;
+    case 'Approval':
+      return <ApprovalAction action={action} pipeline={pipeline} stage={stage} />;
   }
 };
 

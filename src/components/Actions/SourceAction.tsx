@@ -44,7 +44,7 @@ const SourceAction: React.FC<SourceActionProps> = ({ action, pipeline, stage }: 
 
   const summary = pipeline.pipelineExecutionSummary[0];
 
-  const lastUpdateTime = summary.lastUpdateTime ? pipeline.pipelineExecutionSummary[0].lastUpdateTime : null;
+  const lastUpdateTime = action.lastUpdated;
 
   const latestCommitUrl = summary.sourceRevisions![0].revisionUrl;
 

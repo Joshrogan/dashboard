@@ -19,6 +19,8 @@ import {
   StartPipelineExecutionCommandOutput,
   RetryStageExecutionCommand,
   RetryStageExecutionCommandOutput,
+  PutApprovalResultCommand,
+  PutApprovalResultCommandOutput,
 } from '@aws-sdk/client-codepipeline';
 import { PipelineModel, PipelineExecutionSummaryModel, StageModel, ActionModel } from './CodePipelineModels';
 
@@ -58,7 +60,6 @@ export class CodePipelineService {
 
       const pipelineExecutionInfo = await this.getPipelineExecutionInfo(pipelineName);
 
-      console.log(pipelineExecutionInfo, 'pipelineexecutioninfo');
       const pipelineState: GetPipelineStateCommandOutput = await this.getPipelineState(pipelineName);
       let pipelineExecutionId = pipelineState.stageStates![0].latestExecution!.pipelineExecutionId;
 
@@ -93,7 +94,6 @@ export class CodePipelineService {
         if (pipelineStageStates.stageStates !== undefined) {
           let stageStates: StageState[] = pipelineStageStates.stageStates;
           let newStages: StageModel[] = pipeline.stages.map((stage) => {
-            console.log('stage States', stageStates);
             let findStage = stageStates.find((tempStage) => {
               return tempStage.stageName === stage.stageName;
             });
@@ -104,6 +104,8 @@ export class CodePipelineService {
                 actionId: findStage?.actionStates![0].latestExecution?.externalExecutionId,
                 lastUpdated: findStage?.actionStates![0].latestExecution?.lastStatusChange,
                 entityUrl: findStage?.actionStates![0].entityUrl,
+                token: findStage?.actionStates![0].latestExecution?.token,
+                summary: findStage?.actionStates![0].latestExecution?.summary,
               };
             });
             let newStage: StageModel = {
@@ -204,6 +206,37 @@ export class CodePipelineService {
         new RetryStageExecutionCommand({ pipelineName, stageName, pipelineExecutionId, retryMode: 'FAILED_ACTIONS' })
       );
 
+      return results;
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  public async putApprovalResult(
+    pipelineName: string,
+    stageName: string,
+    resultStatus: string,
+    resultSummary: string,
+    actionName: string,
+    token: string
+  ): Promise<any> {
+    try {
+      const results: PutApprovalResultCommandOutput = await this.client.send(
+        new PutApprovalResultCommand({
+          pipelineName,
+          stageName,
+          actionName,
+          result: {
+            status: resultStatus, // Approved | Rejected
+            summary: resultSummary, // summary of current status
+          },
+          token,
+        })
+      );
+
+      /* 
+       returns {"approvedAt": number}
+      */
       return results;
     } catch (error) {
       console.log(error);

@@ -8,6 +8,8 @@ export interface ActionModel {
   buildProject?: string;
   lastUpdated?: Date;
   entityUrl?: string;
+  token?: string;
+  summary?: string;
 }
 
 export interface StageModel {

@@ -26,28 +26,33 @@ const BuildAction: React.FC<BuildActionProps> = ({ action, pipeline, stage }: Bu
       const CloudWatchLogsClient = new CloudWatchLogsService(config);
       const buildIds = await codeBuildClient.listBuildsForProject(buildProjectId);
       let builds: BuildModel[] = await codeBuildClient.batchGetBuilds(buildIds);
-      let buildsWithLogs: BuildModel[] = await Promise.all(
-        builds.map(async (build) => {
-          return {
-            ...build,
-            logs: await CloudWatchLogsClient.getLogEvents(build.cloudWatch?.groupName, build.cloudWatch?.streamName)!,
-          };
-        })
-      );
-      console.log('buildsWithLogs', buildsWithLogs);
+      if (builds !== undefined) {
+        let buildsWithLogs: BuildModel[] = await Promise.all(
+          builds.map(async (build) => {
+            return {
+              ...build,
+              logs: await CloudWatchLogsClient.getLogEvents(build.cloudWatch?.groupName, build.cloudWatch?.streamName)!,
+            };
+          })
+        );
 
-      setBuilds(buildsWithLogs);
+        setBuilds(buildsWithLogs);
+      }
     };
     fetchData();
   }, [config, buildProjectId]);
 
-  return (
-    <div>
-      {builds.map((build) => (
-        <BuildListComponent build={build} />
-      ))}
-    </div>
-  );
+  if (builds.length > 0 && builds !== undefined) {
+    return (
+      <div>
+        {builds.map((build) => (
+          <BuildListComponent build={build} action={action} />
+        ))}
+      </div>
+    );
+  } else {
+    return <div>{'Loading...'}</div>;
+  }
 };
 
 export default BuildAction;

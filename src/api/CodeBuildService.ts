@@ -19,6 +19,7 @@ export class CodeBuildService {
     try {
       const results: BatchGetBuildsCommandOutput = await this.client.send(new BatchGetBuildsCommand({ ids: builds }));
 
+      console.log('buildResults', results);
       if (results.builds !== undefined) {
         const builds: BuildModel[] = results.builds.map((build) => {
           let totalDuration: any = build.endTime!.valueOf() - build.startTime!.valueOf();
@@ -29,6 +30,7 @@ export class CodeBuildService {
             sourceVersion: build.sourceVersion!,
             duration: totalDuration!,
             completed: build.buildComplete!,
+            endTime: build.endTime!,
             phases: build.phases!.map((phase) => {
               let contextMessage = '';
               let contextStatus = '';

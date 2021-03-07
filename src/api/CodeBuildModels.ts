@@ -30,6 +30,7 @@ export interface BuildModel {
   phases: PhaseModel[];
   cloudWatch?: CloudWatchModel;
   logs?: LogModel[];
+  endTime: Date;
 }
 
 // logs and phases todo
