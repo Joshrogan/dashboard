@@ -10,7 +10,7 @@ const getStatusColor = (status: string): string => {
       return 'red';
     case PipelineExecutionStatus.InProgress:
     case StatusType.IN_PROGRESS:
-      return 'blue';
+      return 'DodgerBlue';
     case PipelineExecutionStatus.Stopped:
     case StatusType.STOPPED:
       return 'orange';

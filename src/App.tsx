@@ -21,6 +21,7 @@ function App() {
     iname: 'none',
     show: false,
   });
+
   const codePipelineClient = new CodePipelineService(config);
 
   useEffect(() => {
@@ -43,6 +44,7 @@ function App() {
       }
     };
     fetchData();
+    // setInterval(fetchData, 30000);
   }, [config]);
 
   console.log('pipelines app level', pipelines);

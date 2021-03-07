@@ -22,7 +22,7 @@ export class CodeBuildService {
       console.log('buildResults', results);
       if (results.builds !== undefined) {
         const builds: BuildModel[] = results.builds.map((build) => {
-          let totalDuration: any = build.endTime!.valueOf() - build.startTime!.valueOf();
+          let totalDuration: any = build.endTime ? build.endTime.valueOf() - build.startTime!.valueOf() : 0;
           return {
             buildRun: build.id!,
             buildStatus: build.buildStatus!,

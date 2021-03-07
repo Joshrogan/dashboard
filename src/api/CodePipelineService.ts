@@ -223,14 +223,14 @@ export class CodePipelineService {
     try {
       const results: PutApprovalResultCommandOutput = await this.client.send(
         new PutApprovalResultCommand({
-          pipelineName,
-          stageName,
-          actionName,
+          pipelineName: pipelineName,
+          stageName: stageName,
+          actionName: actionName,
           result: {
             status: resultStatus, // Approved | Rejected
             summary: resultSummary, // summary of current status
           },
-          token,
+          token: token,
         })
       );
 

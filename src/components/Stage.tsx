@@ -67,7 +67,13 @@ const Stage: React.FC<StageProps> = ({ stage, pipeline, pipelineClient }: StageP
         <TreeItem nodeId={stage.stageName} label={stageLabel}>
           <List key={stage.stageName}>
             {actions.map((action) => (
-              <Action action={action} pipeline={pipeline} key={action.actionName} stage={stage} />
+              <Action
+                action={action}
+                pipeline={pipeline}
+                key={action.actionName}
+                stage={stage}
+                pipelineClient={pipelineClient}
+              />
             ))}
           </List>
         </TreeItem>

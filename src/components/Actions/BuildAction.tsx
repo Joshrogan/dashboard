@@ -40,6 +40,8 @@ const BuildAction: React.FC<BuildActionProps> = ({ action, pipeline, stage }: Bu
       }
     };
     fetchData();
+
+    // setInterval(fetchData, 30000);
   }, [config, buildProjectId]);
 
   if (builds.length > 0 && builds !== undefined) {

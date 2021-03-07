@@ -1,19 +1,22 @@
-import React from 'react';
-import TextareaAutosize from '@material-ui/core/TextareaAutosize';
+import React, { useState } from 'react';
 import Card from '@material-ui/core/Card';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import CardContent from '@material-ui/core/CardContent';
 import CardHeader from '@material-ui/core/CardHeader';
+import Button from '@material-ui/core/Button';
 import ReactTimeAgo from 'react-time-ago';
 import { getStatusColor } from '../pipelineUtils';
 import Link from '@material-ui/core/Link';
 import LaunchIcon from '@material-ui/icons/Launch';
 import { ActionModel, PipelineModel, StageModel } from '../../api/CodePipelineModels';
+import { CodePipelineService } from '../../api/CodePipelineService';
+import { ResultField } from '@aws-sdk/client-cloudwatch-logs';
 
 type ApprovalActionProps = {
   action: ActionModel;
   pipeline: PipelineModel;
   stage: StageModel;
+  pipelineClient: CodePipelineService;
 };
 
 const useStyles = makeStyles<Theme, StageModel>((theme) =>
@@ -26,6 +29,10 @@ const useStyles = makeStyles<Theme, StageModel>((theme) =>
     root: {
       padding: '8px',
     },
+    button: {
+      padding: '1rem',
+      width: '50%',
+    },
     cardHeader: {
       backgroundColor: (stage) => getStatusColor(stage.status ? stage.status : 'default'),
       borderBottom: '1px solid black',
@@ -36,8 +43,22 @@ const useStyles = makeStyles<Theme, StageModel>((theme) =>
   })
 );
 
-const ApprovalAction: React.FC<ApprovalActionProps> = ({ action, pipeline, stage }: ApprovalActionProps) => {
+const ApprovalAction: React.FC<ApprovalActionProps> = ({
+  action,
+  pipeline,
+  stage,
+  pipelineClient,
+}: ApprovalActionProps) => {
   const classes = useStyles(stage);
+  const [textAreaValue, setTextAreaValue] = useState<string>('');
+
+  // pipelineName: string,
+  // stageName: string,
+  // resultStatus: string,
+  // resultSummary: string,
+  // actionName: string,
+  // token: string
+
   if (action === undefined) {
     return null;
   }
@@ -48,6 +69,17 @@ const ApprovalAction: React.FC<ApprovalActionProps> = ({ action, pipeline, stage
   if (pipeline?.pipelineExecutionSummary === undefined) {
     return null;
   }
+
+  let pipelineName = pipeline.pipelineName;
+  let stageName = stage.stageName;
+  let actionName = action.actionName;
+
+  const onClick = (buttonType: string) => {
+    let resultStatus = buttonType;
+    let resultSummary = textAreaValue;
+    let token = action.token ? action.token : '';
+    pipelineClient.putApprovalResult(pipelineName, stageName, resultStatus, resultSummary, actionName, token);
+  };
 
   let summary = pipeline.pipelineExecutionSummary.find((exeuctionSummary) => exeuctionSummary.status === 'Succeeded');
 
@@ -61,10 +93,26 @@ const ApprovalAction: React.FC<ApprovalActionProps> = ({ action, pipeline, stage
   const latestCommitSummary = summary.sourceRevisions![0].revisionSummary;
 
   const latestCommitId = summary.sourceRevisions![0].revisionId;
-
-  console.log('actionAPPROVAL', action);
+  console.log('#textAreaValue', textAreaValue);
   if (action.summary === undefined && action.token !== undefined) {
-    return <textarea rows={10} className={classes.textArea}></textarea>;
+    return (
+      <div>
+        <textarea
+          rows={10}
+          className={classes.textArea}
+          value={textAreaValue}
+          placeholder={'Enter comments here'}
+          maxLength={255}
+          onChange={(ev: React.ChangeEvent<HTMLTextAreaElement>): void => setTextAreaValue(ev.target.value)}
+        ></textarea>
+        <Button variant="contained" color="primary" className={classes.button} onClick={() => onClick('Approved')}>
+          Approve
+        </Button>
+        <Button variant="contained" color="secondary" className={classes.button} onClick={() => onClick('Rejected')}>
+          Reject
+        </Button>
+      </div>
+    );
   } else {
     return (
       <div className={classes.root}>
