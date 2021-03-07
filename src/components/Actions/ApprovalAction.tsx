@@ -64,7 +64,7 @@ const ApprovalAction: React.FC<ApprovalActionProps> = ({ action, pipeline, stage
 
   console.log('actionAPPROVAL', action);
   if (action.summary === undefined && action.token !== undefined) {
-    return <TextareaAutosize className={classes.textArea} rowsMin={10} placeholder="Enter approval comments" />;
+    return <textarea rows={10} className={classes.textArea}></textarea>;
   } else {
     return (
       <div className={classes.root}>
@@ -75,7 +75,7 @@ const ApprovalAction: React.FC<ApprovalActionProps> = ({ action, pipeline, stage
             {lastUpdateTime && <ReactTimeAgo date={lastUpdateTime} />}
           </CardContent>
           <CardContent>
-            {'Last Successful Commit: '}
+            {'Latest Commit: '}
             {latestCommitSummary}{' '}
             {
               <Link href={latestCommitUrl}>
