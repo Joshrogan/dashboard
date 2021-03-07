@@ -101,7 +101,7 @@ const ApprovalAction: React.FC<ApprovalActionProps> = ({
           rows={10}
           className={classes.textArea}
           value={textAreaValue}
-          placeholder={'Enter comments here'}
+          placeholder={'Optional Feedback Here...'}
           maxLength={255}
           onChange={(ev: React.ChangeEvent<HTMLTextAreaElement>): void => setTextAreaValue(ev.target.value)}
         ></textarea>
