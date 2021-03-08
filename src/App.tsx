@@ -49,6 +49,7 @@ function App() {
   }, [config]);
 
   console.log('pipelines app level', pipelines);
+
   return (
     <Container maxWidth="lg">
       <Typography variant="h2">{'My Pipelines'}</Typography>
@@ -66,19 +67,21 @@ function App() {
           />
         ))
       )} */}
-
       <Router>
         <Route exact path="/">
           {pipelines?.map((pipeline) => (
             <Pipeline pipeline={pipeline ?? null} key={pipeline?.pipelineName} />
           ))}
         </Route>
-        <Route path="/pipeline/:pipelineName">
-          <Stages
-            pipeline={pipelines.find((pipeline) => pipeline.pipelineName === showChild.iname)}
-            pipelineClient={codePipelineClient}
-          />
-        </Route>
+        <Route
+          path="/pipeline/:pipelineName"
+          render={(props) => (
+            <Stages
+              pipeline={pipelines.find((pipeline) => pipeline.pipelineName === props.match.params.pipelineName)}
+              pipelineClient={codePipelineClient}
+            />
+          )}
+        ></Route>
       </Router>
     </Container>
   );
