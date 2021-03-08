@@ -52,7 +52,7 @@ function App() {
 
   return (
     <Container maxWidth="lg">
-      <Typography variant="h2">{'My Pipelines'}</Typography>
+      <Typography variant="h2">{'Velocity CD Dashboard'}</Typography>
       {/* {showChild.show ? (
         <Stages
           pipeline={pipelines.find((pipeline) => pipeline.pipelineName === showChild.iname)}
