@@ -7,6 +7,7 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Pipeline from './components/Pipeline';
 import Stages from './components/Stages';
+import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
 
 interface IState {
   iname: string | undefined;
@@ -44,7 +45,7 @@ function App() {
       }
     };
     fetchData();
-    // setInterval(fetchData, 30000);
+    // setInterval(fetchData, 10000);
   }, [config]);
 
   console.log('pipelines app level', pipelines);

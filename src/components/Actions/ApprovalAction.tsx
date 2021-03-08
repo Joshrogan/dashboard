@@ -52,13 +52,6 @@ const ApprovalAction: React.FC<ApprovalActionProps> = ({
   const classes = useStyles(stage);
   const [textAreaValue, setTextAreaValue] = useState<string>('');
 
-  // pipelineName: string,
-  // stageName: string,
-  // resultStatus: string,
-  // resultSummary: string,
-  // actionName: string,
-  // token: string
-
   if (action === undefined) {
     return null;
   }
@@ -74,11 +67,18 @@ const ApprovalAction: React.FC<ApprovalActionProps> = ({
   let stageName = stage.stageName;
   let actionName = action.actionName;
 
-  const onClick = (buttonType: string) => {
+  const onClick = async (buttonType: string) => {
     let resultStatus = buttonType;
     let resultSummary = textAreaValue;
     let token = action.token ? action.token : '';
-    pipelineClient.putApprovalResult(pipelineName, stageName, resultStatus, resultSummary, actionName, token);
+    let result = await pipelineClient.putApprovalResult(
+      pipelineName,
+      stageName,
+      resultStatus,
+      resultSummary,
+      actionName,
+      token
+    );
   };
 
   let summary = pipeline.pipelineExecutionSummary.find((exeuctionSummary) => exeuctionSummary.status === 'Succeeded');
