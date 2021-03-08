@@ -9,10 +9,10 @@ import { getStatusColor } from './pipelineUtils';
 import Button from '@material-ui/core/Button';
 import Link from '@material-ui/core/Link';
 import LaunchIcon from '@material-ui/icons/Launch';
+import { Link as RouterLink } from 'react-router-dom';
 
 type PipelineProps = {
   pipeline: PipelineModel | null;
-  clickHandler: (e: React.MouseEvent<HTMLButtonElement>) => void;
 };
 
 const useStyles = makeStyles<Theme, PipelineProps>((theme) =>
@@ -62,11 +62,7 @@ const Pipeline: React.FC<PipelineProps> = (Props: PipelineProps) => {
           className={classes.cardHeader}
           title={pipeline.pipelineName}
           subheader={'Status: ' + pipelineStatus}
-          action={
-            <Button size="small" color="primary" variant="contained" onClick={Props.clickHandler}>
-              More Info
-            </Button>
-          }
+          action={<RouterLink to={`/pipeline/${pipeline.pipelineName}`}>More Info</RouterLink>}
         />
         <CardContent>
           {'Last Updated: '}

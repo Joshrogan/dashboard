@@ -79,6 +79,8 @@ const ApprovalAction: React.FC<ApprovalActionProps> = ({
       actionName,
       token
     );
+
+    console.log('result', result);
   };
 
   let summary = pipeline.pipelineExecutionSummary.find((exeuctionSummary) => exeuctionSummary.status === 'Succeeded');

@@ -52,7 +52,7 @@ function App() {
   return (
     <Container maxWidth="lg">
       <Typography variant="h2">{'My Pipelines'}</Typography>
-      {showChild.show ? (
+      {/* {showChild.show ? (
         <Stages
           pipeline={pipelines.find((pipeline) => pipeline.pipelineName === showChild.iname)}
           pipelineClient={codePipelineClient}
@@ -65,7 +65,21 @@ function App() {
             key={pipeline?.pipelineName}
           />
         ))
-      )}
+      )} */}
+
+      <Router>
+        <Route exact path="/">
+          {pipelines?.map((pipeline) => (
+            <Pipeline pipeline={pipeline ?? null} key={pipeline?.pipelineName} />
+          ))}
+        </Route>
+        <Route path="/pipeline/:pipelineName">
+          <Stages
+            pipeline={pipelines.find((pipeline) => pipeline.pipelineName === showChild.iname)}
+            pipelineClient={codePipelineClient}
+          />
+        </Route>
+      </Router>
     </Container>
   );
 }
