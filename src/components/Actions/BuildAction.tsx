@@ -25,7 +25,7 @@ const BuildAction: React.FC<BuildActionProps> = ({ action, pipeline, stage }: Bu
       const codeBuildClient = new CodeBuildService(config);
       const CloudWatchLogsClient = new CloudWatchLogsService(config);
       const buildIds = await codeBuildClient.listBuildsForProject(buildProjectId);
-      let builds: BuildModel[] = await codeBuildClient.batchGetBuilds(buildIds);
+      let builds: BuildModel[] | undefined = await codeBuildClient.batchGetBuilds(buildIds);
       if (builds !== undefined) {
         let buildsWithLogs: BuildModel[] = await Promise.all(
           builds.map(async (build) => {
@@ -39,6 +39,7 @@ const BuildAction: React.FC<BuildActionProps> = ({ action, pipeline, stage }: Bu
         setBuilds(buildsWithLogs);
       }
     };
+
     fetchData();
 
     // setInterval(fetchData, 30000);

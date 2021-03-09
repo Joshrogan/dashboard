@@ -1,42 +1,26 @@
 import { CloudWatchLogsService } from './CloudWatchLogsService';
-import { mocked } from 'ts-jest/utils';
-// import { CloudWatchLogsClient, GetLogEventsCommandFn } from '../../__mocks__/aws-sdk/client-cloudwatch-logs';
+import { mock, when, anyString, instance } from 'ts-mockito';
 
-export const CONFIGURATION = {
-  region: 'eu-west-1',
-  credentials: {
-    accessKeyId: 'ACCESS_KEY',
-    secretAccessKey: 'SECRET_ACCESS_KEY',
-  },
-};
-
-jest.mock('./CloudWatchLogsService', () => {
-  return {
-    CloudWatchLogsService: jest.fn().mockImplementation(() => {
-      return {
-        getLogEvents: (logGroupName: string, logStreamName: string) => {
-          return `${logGroupName}${logStreamName}`;
-        },
-      };
-    }),
-  };
-});
+const MockedCloudWatchLogsService = mock(CloudWatchLogsService);
 
 describe('CloudWatchLogsService', () => {
-  const MockedCloudWatchLogsService = mocked(CloudWatchLogsService, true);
+  it('testing', async () => {
+    let mockInstance = instance(MockedCloudWatchLogsService);
 
-  beforeEach(() => {
-    MockedCloudWatchLogsService.mockClear();
-  });
+    when(MockedCloudWatchLogsService.getLogEvents(anyString(), anyString())).thenReturn([
+      {
+        timestamp: '1549312452',
+        message: 'hello',
+      },
+    ]);
 
-  it('Checking it calls class constructor', () => {
-    const cwClient = new CloudWatchLogsService(CONFIGURATION);
-    expect(MockedCloudWatchLogsService).toHaveBeenCalledTimes(1);
-  });
+    const actual = await mockInstance.getLogEvents('logGroupName', 'logStreamName');
 
-  it('Testing it calls getLogEvents', () => {
-    const cwClient = new CloudWatchLogsService(CONFIGURATION);
-    let value = cwClient.getLogEvents('logGroupName', 'logStreamName');
-    expect(value).toEqual('logGroupNamelogStreamName');
+    expect(actual).toEqual([
+      {
+        timestamp: '1549312452',
+        message: 'hello',
+      },
+    ]);
   });
 });

@@ -15,7 +15,7 @@ export class CodeBuildService {
     this.client = new CodeBuildClient(configuration);
   }
 
-  public async batchGetBuilds(builds: string[]): Promise<any> {
+  public async batchGetBuilds(builds: string[]): Promise<BuildModel[] | undefined> {
     try {
       const results: BatchGetBuildsCommandOutput = await this.client.send(new BatchGetBuildsCommand({ ids: builds }));
 
