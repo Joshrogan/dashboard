@@ -7,7 +7,7 @@ import {
 import { LogModel } from './CodeBuildModels';
 
 export class CloudWatchLogsService {
-  private client: CloudWatchLogsClient;
+  public client: CloudWatchLogsClient;
 
   constructor(configuration: CloudWatchLogsClientConfig) {
     this.client = new CloudWatchLogsClient(configuration);

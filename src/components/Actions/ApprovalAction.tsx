@@ -10,7 +10,6 @@ import Link from '@material-ui/core/Link';
 import LaunchIcon from '@material-ui/icons/Launch';
 import { ActionModel, PipelineModel, StageModel } from '../../api/CodePipelineModels';
 import { CodePipelineService } from '../../api/CodePipelineService';
-import { ResultField } from '@aws-sdk/client-cloudwatch-logs';
 
 type ApprovalActionProps = {
   action: ActionModel;
@@ -98,21 +97,51 @@ const ApprovalAction: React.FC<ApprovalActionProps> = ({
   console.log('#textAreaValue', textAreaValue);
   if (action.summary === undefined && action.token !== undefined) {
     return (
-      <div>
-        <textarea
-          rows={10}
-          className={classes.textArea}
-          value={textAreaValue}
-          placeholder={'Optional Feedback Here...'}
-          maxLength={255}
-          onChange={(ev: React.ChangeEvent<HTMLTextAreaElement>): void => setTextAreaValue(ev.target.value)}
-        ></textarea>
-        <Button variant="contained" color="primary" className={classes.button} onClick={() => onClick('Approved')}>
-          Approve
-        </Button>
-        <Button variant="contained" color="secondary" className={classes.button} onClick={() => onClick('Rejected')}>
-          Reject
-        </Button>
+      <div className={classes.root}>
+        <Card className={classes.card} raised={true}>
+          <CardHeader className={classes.cardHeader} title={action.actionName} subheader={'Status: ' + stage.status} />
+          <CardContent>
+            {'Last Updated: '}
+            {lastUpdateTime && <ReactTimeAgo date={lastUpdateTime} />}
+          </CardContent>
+          <CardContent>
+            {'Latest Commit: '}
+            {latestCommitSummary}{' '}
+            {
+              <Link href={latestCommitUrl}>
+                {latestCommitId?.substring(0, 9)} {<LaunchIcon fontSize={'inherit'} viewBox={'0 0 24 18'} />}
+              </Link>
+            }
+          </CardContent>
+          <CardContent>
+            <div>
+              <textarea
+                rows={10}
+                className={classes.textArea}
+                value={textAreaValue}
+                placeholder={'Optional Feedback Here...'}
+                maxLength={255}
+                onChange={(ev: React.ChangeEvent<HTMLTextAreaElement>): void => setTextAreaValue(ev.target.value)}
+              ></textarea>
+              <Button
+                variant="contained"
+                color="primary"
+                className={classes.button}
+                onClick={() => onClick('Approved')}
+              >
+                Approve
+              </Button>
+              <Button
+                variant="contained"
+                color="secondary"
+                className={classes.button}
+                onClick={() => onClick('Rejected')}
+              >
+                Reject
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
       </div>
     );
   } else {

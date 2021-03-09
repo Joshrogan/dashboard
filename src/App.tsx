@@ -7,21 +7,12 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Pipeline from './components/Pipeline';
 import Stages from './components/Stages';
-import { BrowserRouter as Router, Switch, Route, Link } from 'react-router-dom';
-
-interface IState {
-  iname: string | undefined;
-  show: boolean;
-}
+import { BrowserRouter as Router, Route, Link as RouterLink } from 'react-router-dom';
 
 function App() {
   const [pipelines, setPipelines] = useState<PipelineModel[]>([]);
   // I'm using state for the config files for the opportunity in the future to support multiple regions/accounts.
   const [config] = useState<CodePipelineClientConfig>(CONFIGURATION);
-  const [showChild, setShowChild] = useState<IState>({
-    iname: 'none',
-    show: false,
-  });
 
   const codePipelineClient = new CodePipelineService(config);
 
@@ -52,28 +43,17 @@ function App() {
 
   return (
     <Container maxWidth="lg">
-      <Typography variant="h2">{'Velocity CD Dashboard'}</Typography>
-      {/* {showChild.show ? (
-        <Stages
-          pipeline={pipelines.find((pipeline) => pipeline.pipelineName === showChild.iname)}
-          pipelineClient={codePipelineClient}
-        />
-      ) : (
-        pipelines?.map((pipeline) => (
-          <Pipeline
-            clickHandler={() => setShowChild({ iname: pipeline?.pipelineName, show: true })}
-            pipeline={pipeline ?? null}
-            key={pipeline?.pipelineName}
-          />
-        ))
-      )} */}
       <Router>
+        <Typography variant="h2">
+          <RouterLink to="/">Velocity CD Dashboard</RouterLink>
+        </Typography>
         <Route exact path="/">
           {pipelines?.map((pipeline) => (
             <Pipeline pipeline={pipeline ?? null} key={pipeline?.pipelineName} />
           ))}
         </Route>
         <Route
+          exact
           path="/pipeline/:pipelineName"
           render={(props) => (
             <Stages
