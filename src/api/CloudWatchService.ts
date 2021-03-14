@@ -6,7 +6,7 @@ import {
 } from '@aws-sdk/client-cloudwatch-logs';
 import { LogModel } from './CodeBuildModels';
 
-export class CloudWatchLogsService {
+export class CloudWatchService {
   public client: CloudWatchLogsClient;
 
   constructor(configuration: CloudWatchLogsClientConfig) {

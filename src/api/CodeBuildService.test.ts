@@ -119,7 +119,7 @@ const mockBuild = {
   },
 };
 
-describe('CloudWatchLogsService', () => {
+describe('CloudWatchService', () => {
   it('testing methods', async () => {
     let mockInstance = instance(MockedCodeBuildService);
 

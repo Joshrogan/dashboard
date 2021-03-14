@@ -1,13 +1,13 @@
-import { CloudWatchLogsService } from './CloudWatchLogsService';
+import { CloudWatchService } from './CloudWatchService';
 import { mock, when, anyString, instance } from 'ts-mockito';
 
-const MockedCloudWatchLogsService = mock(CloudWatchLogsService);
+const MockedCloudWatchService = mock(CloudWatchService);
 
-describe('CloudWatchLogsService', () => {
+describe('CloudWatchService', () => {
   it('testing', async () => {
-    let mockInstance = instance(MockedCloudWatchLogsService);
+    let mockInstance = instance(MockedCloudWatchService);
 
-    when(MockedCloudWatchLogsService.getLogEvents(anyString(), anyString())).thenReturn([
+    when(MockedCloudWatchService.getLogEvents(anyString(), anyString())).thenResolve([
       {
         timestamp: '1549312452',
         message: 'hello',
