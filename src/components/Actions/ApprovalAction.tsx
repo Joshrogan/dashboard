@@ -94,7 +94,7 @@ const ApprovalAction: React.FC<ApprovalActionProps> = ({
   const latestCommitSummary = summary.sourceRevisions![0].revisionSummary;
 
   const latestCommitId = summary.sourceRevisions![0].revisionId;
-  if (action.summary === undefined && action.token !== undefined) {
+  if (action.token !== undefined) {
     return (
       <div className={classes.root}>
         <Card className={classes.card} raised={true}>
