@@ -94,7 +94,6 @@ const ApprovalAction: React.FC<ApprovalActionProps> = ({
   const latestCommitSummary = summary.sourceRevisions![0].revisionSummary;
 
   const latestCommitId = summary.sourceRevisions![0].revisionId;
-  console.log('#textAreaValue', textAreaValue);
   if (action.summary === undefined && action.token !== undefined) {
     return (
       <div className={classes.root}>
