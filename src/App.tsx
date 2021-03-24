@@ -36,7 +36,7 @@ function App() {
       }
     };
     fetchData();
-    // setInterval(fetchData, 10000);
+    setInterval(fetchData, 20000);
   }, [config]);
 
   return (
