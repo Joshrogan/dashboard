@@ -35,10 +35,10 @@ const BuildLogs: React.FC<BuildLogsProps> = ({ logs }: BuildLogsProps) => {
         </Accordion>
       );
     } else {
-      return <div>{'Hello World!'}</div>;
+      return <div>{'Nothing yet...'}</div>;
     }
   } else {
-    return <div>{'Hello World!'}</div>;
+    return <div>{'Nothing yet...'}</div>;
   }
 };
 

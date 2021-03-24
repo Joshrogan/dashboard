@@ -91,6 +91,9 @@ export class CodePipelineService {
 
         // code below is to get the status of each stage & status of each action and store them in model too
         let pipelineStageStates: GetPipelineStateCommandOutput = await this.getPipelineState(pipeline.pipelineName);
+
+        console.log('#pipelineStageStates', pipelineStageStates);
+
         if (pipelineStageStates.stageStates !== undefined) {
           let stageStates: StageState[] = pipelineStageStates.stageStates;
           let newStages: StageModel[] = pipeline.stages.map((stage) => {
