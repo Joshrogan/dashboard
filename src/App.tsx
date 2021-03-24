@@ -39,8 +39,6 @@ function App() {
     // setInterval(fetchData, 10000);
   }, [config]);
 
-  console.log('pipelines app level', pipelines);
-
   return (
     <Container maxWidth="lg">
       <Router>

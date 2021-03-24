@@ -19,7 +19,6 @@ export class CodeBuildService {
     try {
       const results: BatchGetBuildsCommandOutput = await this.client.send(new BatchGetBuildsCommand({ ids: builds }));
 
-      console.log('buildResults', results);
       if (results.builds !== undefined) {
         const builds: BuildModel[] = results.builds.map((build) => {
           let totalDuration: any = build.endTime ? build.endTime.valueOf() - build.startTime!.valueOf() : 0;
@@ -59,7 +58,6 @@ export class CodeBuildService {
           };
         });
 
-        console.log('builds', builds);
         return builds;
       }
     } catch (error) {
