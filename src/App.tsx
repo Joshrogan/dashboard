@@ -43,7 +43,7 @@ function App() {
     <Container maxWidth="lg">
       <Router>
         <Typography variant="h2">
-          <RouterLink to="/">Velocity CD Dashboard</RouterLink>
+          <RouterLink to="/">CloudFirst Dashboard</RouterLink>
         </Typography>
         <Route exact path="/">
           {pipelines?.map((pipeline) => (
