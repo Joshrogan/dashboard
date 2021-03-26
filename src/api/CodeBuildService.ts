@@ -78,6 +78,3 @@ export class CodeBuildService {
     }
   }
 }
-
-// listBuildsForProject needed
-// ListProjects needed

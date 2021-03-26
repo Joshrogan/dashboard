@@ -71,7 +71,7 @@ const PhasesList: React.FC<PhasesListProps> = ({ phaseList }: PhasesListProps) =
       </AccordionSummary>
       <List component="div" disablePadding>
         {phaseList.map((phase) => (
-          <ListItem button>
+          <ListItem>
             <ListItemIcon>{getStatusIcon(phase.phaseStatus)}</ListItemIcon>
             <ListItemText secondary={getListTextSecondary(phase)}>{getListItemText(phase)}</ListItemText>
           </ListItem>
